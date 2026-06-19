@@ -1,0 +1,23 @@
+{
+  "expo": {
+    "name": "EnquiryApplication",
+    "slug": "enquiry-application",
+    "version": "1.0.0",
+    "platforms": [
+      "ios",
+      "android"eas build --platform android --profile preview
+    ],
+    "android": {
+      "package": "com.enquiryapp.mobile"
+    },
+    "plugins": [
+      "@react-native-community/datetimepicker"
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "c3cd1bab-9ca6-45bd-b36d-3c42ebaf9732"
+      }
+    }
+  },
+  "displayName": "EnquiryApplication"
+}
