@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { authApi } from '../api/authApi';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as LocalAuthentication from 'expo-local-authentication';
 import {
   ActivityIndicator,
   Alert,
@@ -253,6 +254,54 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({ onLoginSuccess }) => {
   const [emailError, setEmailError] = useState('');
   const [passwordError, setPasswordError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [isBiometricSupported, setIsBiometricSupported] = useState(false);
+
+  React.useEffect(() => {
+    (async () => {
+      const compatible = await LocalAuthentication.hasHardwareAsync();
+      setIsBiometricSupported(compatible);
+    })();
+  }, []);
+
+  const handleBiometricLogin = async () => {
+    try {
+      const savedEmail = await AsyncStorage.getItem('userEmail');
+      const savedPassword = await AsyncStorage.getItem('userPassword');
+
+      if (!savedEmail || !savedPassword) {
+        Alert.alert('Setup Required', 'Please login with your email and password first to enable biometric login.');
+        return;
+      }
+
+      const isEnrolled = await LocalAuthentication.isEnrolledAsync();
+      if (!isEnrolled) {
+        Alert.alert('No Biometrics Found', 'Please set up Face ID or Touch ID on your device.');
+        return;
+      }
+
+      const result = await LocalAuthentication.authenticateAsync({
+        promptMessage: 'Login with Biometrics',
+        fallbackLabel: 'Use Passcode',
+      });
+
+      if (result.success) {
+        setEmail(savedEmail);
+        setPassword(savedPassword);
+        setIsLoading(true);
+        const response = await authApi.login({ email: savedEmail, password: savedPassword });
+        const actualToken = response.token || response.accessToken || response.data?.token;
+        if (actualToken) {
+          await AsyncStorage.setItem('userToken', actualToken);
+          await authApi.getMe();
+        }
+        setIsLoading(false);
+        onLoginSuccess();
+      }
+    } catch (error: any) {
+      setIsLoading(false);
+      Alert.alert('Biometric Error', error.message || 'Authentication failed.');
+    }
+  };
 
   const validateForm = (): boolean => {
     let isValid = true;
@@ -291,6 +340,8 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({ onLoginSuccess }) => {
       if (response.token || response.accessToken || response.data?.token) {
         const actualToken = response.token || response.accessToken || response.data?.token;
         await AsyncStorage.setItem('userToken', actualToken);
+        await AsyncStorage.setItem('userEmail', email);
+        await AsyncStorage.setItem('userPassword', password);
         
         // Fetch the user data behind the scenes
         const userData = await authApi.getMe();
@@ -374,6 +425,16 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({ onLoginSuccess }) => {
               onPress={handleLogin}
               style={screenStyles.submitButton}
             />
+
+            {isBiometricSupported && (
+              <TouchableOpacity
+                style={screenStyles.biometricButton}
+                activeOpacity={0.7}
+                onPress={handleBiometricLogin}
+              >
+                <Text style={screenStyles.biometricButtonText}>Login with Biometrics</Text>
+              </TouchableOpacity>
+            )}
           </View>
 
           {/* Footer */}
@@ -477,6 +538,20 @@ const screenStyles = StyleSheet.create({
   },
   submitButton: {
     marginTop: theme.spacing.xs,
+  },
+  biometricButton: {
+    marginTop: theme.spacing.md,
+    alignItems: 'center',
+    padding: theme.spacing.sm,
+    backgroundColor: theme.colors.surfaceLight,
+    borderRadius: theme.borderRadius.md,
+    borderWidth: 1,
+    borderColor: theme.colors.primary,
+  },
+  biometricButtonText: {
+    color: theme.colors.primary,
+    fontSize: theme.typography.sizes.sm,
+    fontWeight: '700',
   },
   footerContainer: {
     flexDirection: 'row',
