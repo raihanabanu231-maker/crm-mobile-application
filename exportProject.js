@@ -1,4 +1,4 @@
-npm install react@19.2.3const fs = require('fs');
+const fs = require('fs');
 const path = require('path');
 
 const projectRoot = 'd:/Enquiry_Application/EnquiryApplication';

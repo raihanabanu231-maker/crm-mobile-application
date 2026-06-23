@@ -265,6 +265,12 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({ onLoginSuccess }) => {
 
   const handleBiometricLogin = async () => {
     try {
+      const compatible = await LocalAuthentication.hasHardwareAsync();
+      if (!compatible) {
+        Alert.alert('Not Supported', 'This device/emulator does not support biometric authentication. If you are on an emulator, please configure fingerprint settings.');
+        return;
+      }
+
       const savedEmail = await AsyncStorage.getItem('userEmail');
       const savedPassword = await AsyncStorage.getItem('userPassword');
 
@@ -426,27 +432,17 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({ onLoginSuccess }) => {
               style={screenStyles.submitButton}
             />
 
-            {isBiometricSupported && (
-              <TouchableOpacity
-                style={screenStyles.biometricButton}
-                activeOpacity={0.7}
-                onPress={handleBiometricLogin}
-              >
-                <Text style={screenStyles.biometricButtonText}>Login with Biometrics</Text>
-              </TouchableOpacity>
-            )}
-          </View>
-
-          {/* Footer */}
-          <View style={screenStyles.footerContainer}>
-            <Text style={screenStyles.footerText}>Don't have an account? </Text>
             <TouchableOpacity
+              style={screenStyles.biometricButton}
               activeOpacity={0.7}
-              onPress={() => Alert.alert('Register', 'Sign up functionality coming soon!')}
+              onPress={handleBiometricLogin}
             >
-              <Text style={screenStyles.signUpLink}>Sign Up</Text>
+              <Text style={screenStyles.biometricButtonText}>Login with Biometrics</Text>
             </TouchableOpacity>
           </View>
+
+          {/* Footer - Removed Sign Up as per user request */}
+          <View style={screenStyles.footerContainer}></View>
         </ScrollView>
       </KeyboardAvoidingView>
     </SafeAreaView>
@@ -520,12 +516,14 @@ const screenStyles = StyleSheet.create({
     fontSize: theme.typography.sizes.xl,
     fontWeight: '700',
     marginBottom: 4,
+    textAlign: 'center',
   },
   cardSubtitle: {
     color: theme.colors.textMuted,
     fontSize: theme.typography.sizes.sm,
     marginBottom: theme.spacing.lg,
     lineHeight: 20,
+    textAlign: 'center',
   },
   forgotPasswordContainer: {
     alignSelf: 'flex-end',

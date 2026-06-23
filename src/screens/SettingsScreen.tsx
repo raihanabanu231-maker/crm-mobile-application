@@ -81,16 +81,7 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({ onBack, onLogout
 
         {/* Settings Grid */}
         <View style={styles.settingsGrid}>
-          {/* Organization */}
-          <TouchableOpacity style={[styles.gridSquare, styles.gridFullWidth]} activeOpacity={0.7}>
-            <View style={styles.gridHeaderRow}>
-               <View style={[styles.gridIconWrap, { backgroundColor: '#FDD7E0' }]}>
-                 <OrgIcon color={COLORS.primaryPink} />
-               </View>
-               <Text style={styles.gridTitle}>Organization</Text>
-            </View>
-            <Text style={styles.gridSubText} numberOfLines={1}>Archery Technocrats Private Limited</Text>
-          </TouchableOpacity>
+
 
           {/* Theme */}
           <TouchableOpacity style={styles.gridSquare} activeOpacity={0.7} onPress={() => setThemeModalVisible(true)}>
@@ -142,17 +133,29 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({ onBack, onLogout
             <Text style={styles.gridTitle}>Terms</Text>
             <Text style={styles.gridSubText}>Of Service</Text>
           </TouchableOpacity>
+
+          {/* Test Alarm Sound */}
+          <TouchableOpacity 
+            style={[styles.gridSquare, styles.gridFullWidth, { backgroundColor: '#FFFBEB' }]} 
+            activeOpacity={0.7} 
+            onPress={async () => {
+               const { sendLocalNotification } = require('../utils/notifications');
+               await sendLocalNotification('Test Alarm ⏰', 'This is what your 9:30 AM / 6:30 PM buzzer will sound like!');
+            }}
+          >
+            <View style={styles.gridHeaderRow}>
+               <View style={[styles.gridIconWrap, { backgroundColor: '#F59E0B' }]}>
+                 <Text style={{ color: COLORS.white, fontWeight: 'bold', fontSize: 18 }}>🔔</Text>
+               </View>
+               <Text style={styles.gridTitle}>Test Alarm Sound</Text>
+            </View>
+            <Text style={styles.gridSubText} numberOfLines={1}>Tap here to trigger a test buzzer notification</Text>
+          </TouchableOpacity>
         </View>
 
       </ScrollView>
 
-      {/* Update Available Banner */}
-      <View style={styles.updateBanner}>
-        <Text style={styles.updateText}>Update Available</Text>
-        <TouchableOpacity activeOpacity={0.8}>
-          <Text style={styles.updateBtnText}>UPDATE</Text>
-        </TouchableOpacity>
-      </View>
+      {/* Update Available Banner Removed as requested */}
 
       {/* Language Modal */}
       <Modal visible={languageModalVisible} transparent animationType="fade" onRequestClose={() => setLanguageModalVisible(false)}>

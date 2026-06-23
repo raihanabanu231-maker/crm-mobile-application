@@ -5,7 +5,7 @@
     "version": "1.0.0",
     "platforms": [
       "ios",
-      "android"eas build --platform android --profile preview
+      "android"
     ],
     "android": {
       "package": "com.enquiryapp.mobile"

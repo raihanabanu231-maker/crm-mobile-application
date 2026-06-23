@@ -18,11 +18,12 @@ Notifications.setNotificationHandler({
  */
 export async function setupNotifications(): Promise<boolean> {
   if (Platform.OS === 'android') {
-    await Notifications.setNotificationChannelAsync('default', {
-      name: 'default',
+    await Notifications.setNotificationChannelAsync('alarm-channel', {
+      name: 'Alarms',
       importance: Notifications.AndroidImportance.MAX,
-      vibrationPattern: [0, 250, 250, 250],
+      vibrationPattern: [0, 500, 250, 500, 250, 500],
       lightColor: '#E85874',
+      bypassDnd: true, // Try to bypass Do Not Disturb
     });
   }
 
@@ -68,7 +69,7 @@ export async function scheduleDailyAlarms() {
   // First, clear all previously scheduled notifications to avoid duplicates
   await Notifications.cancelAllScheduledNotificationsAsync();
 
-  // Schedule Check-in Alarm at 9:25 AM
+  // Schedule Check-in Alarm at 9:30 AM
   await Notifications.scheduleNotificationAsync({
     content: {
       title: "Check-in Reminder ⏰",
@@ -76,11 +77,12 @@ export async function scheduleDailyAlarms() {
       sound: true,
       priority: Notifications.AndroidNotificationPriority.MAX,
       categoryIdentifier: 'CHECK_IN_CATEGORY',
+      vibrationPattern: [0, 500, 250, 500, 250, 500],
     },
     trigger: {
       type: Notifications.SchedulableTriggerInputTypes.DAILY,
       hour: 9,
-      minute: 25,
+      minute: 30,
     },
   });
 
@@ -92,11 +94,12 @@ export async function scheduleDailyAlarms() {
       sound: true,
       priority: Notifications.AndroidNotificationPriority.MAX,
       categoryIdentifier: 'CHECK_OUT_CATEGORY',
+      vibrationPattern: [0, 500, 250, 500, 250, 500],
     },
     trigger: {
       type: Notifications.SchedulableTriggerInputTypes.DAILY,
       hour: 18,
-      minute: 25,
+      minute: 30,
     },
   });
 
@@ -113,6 +116,7 @@ export async function sendLocalNotification(title: string, body: string) {
       body,
       sound: true,
       priority: Notifications.AndroidNotificationPriority.HIGH,
+      vibrationPattern: [0, 500, 250, 500, 250, 500],
     },
     trigger: null,
   });

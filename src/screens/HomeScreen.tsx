@@ -13,6 +13,7 @@ import {
   ActivityIndicator,
   Animated,
   Image,
+  BackHandler,
 } from 'react-native';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import Svg, { Circle, Rect, Path, Line, Polyline, Ellipse, Polygon } from 'react-native-svg';
@@ -601,6 +602,26 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ initialNav, onLogout, on
 
   const [employeeModalVisible, setEmployeeModalVisible] = useState(false);
   const [selectedEmployee, setSelectedEmployee] = useState<any>(null);
+
+  useEffect(() => {
+    const backAction = () => {
+      if (activeNav !== 'Activities' && activeTab === 'My Space') {
+        setActiveNav('Activities');
+        return true;
+      } else if (activeTab === 'Team' && activeTeamNav !== 'Team Space') {
+        setActiveTeamNav('Team Space');
+        return true;
+      } else if (activeTab !== 'My Space') {
+        setActiveTab('My Space');
+        setActiveNav('Activities');
+        return true;
+      }
+      return false;
+    };
+
+    const backHandler = BackHandler.addEventListener('hardwareBackPress', backAction);
+    return () => backHandler.remove();
+  }, [activeTab, activeNav, activeTeamNav]);
 
   const [selectedLeave, setSelectedLeave] = useState<any>(null);
   const [leaveModalVisible, setLeaveModalVisible] = useState(false);
@@ -1255,7 +1276,9 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ initialNav, onLogout, on
             </Svg>
           </TouchableOpacity>
           <View>
-            <Text style={{ fontSize: 13, color: '#6B7280', marginBottom: 2 }}>Good Morning,</Text>
+            <Text style={{ fontSize: 13, color: '#6B7280', marginBottom: 2 }}>
+              {new Date().getHours() < 12 ? 'Good Morning' : new Date().getHours() < 17 ? 'Good Afternoon' : 'Good Evening'},
+            </Text>
             <Text style={{ fontSize: 20, fontWeight: '800', color: '#1A1F2E' }}>{user ? user.firstName : 'Loading...'}</Text>
           </View>
         </View>
@@ -1295,20 +1318,19 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ initialNav, onLogout, on
 
         <Text style={{ fontSize: 24, fontWeight: '700', color: '#FFF', lineHeight: 34 }}>Stay productive and{"\n"}make today count!</Text>
 
-        {/* Target Illustration */}
-        <View style={{ position: 'absolute', right: 20, top: '50%', marginTop: -40 }}>
-          <Svg width="80" height="80" viewBox="0 0 100 100" fill="none">
-            {/* Dart shadow */}
-            <Line x1="88" y1="18" x2="55" y2="51" stroke="rgba(0,0,0,0.2)" strokeWidth="6" strokeLinecap="round" />
-            <Circle cx="50" cy="50" r="38" fill="#FFF" />
-            <Circle cx="50" cy="50" r="28" fill="#39A3DD" />
-            <Circle cx="50" cy="50" r="18" fill="#FFF" />
-            <Circle cx="50" cy="50" r="8" fill="#39A3DD" />
-            {/* Dart stick */}
-            <Line x1="85" y1="15" x2="52" y2="48" stroke="#1A1F2E" strokeWidth="4" strokeLinecap="round" />
-            {/* Dart tail */}
-            <Polyline points="85,25 85,15 75,15" fill="#EF4444" stroke="#EF4444" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" />
-            <Polyline points="80,20 90,10 80,10" fill="#EF4444" stroke="#EF4444" strokeWidth="2" />
+        {/* ATPL Logo Illustration */}
+        <View style={{ position: 'absolute', right: 10, top: '50%', marginTop: -45 }}>
+          <Svg width="90" height="90" viewBox="0 0 100 100" fill="none">
+            {/* Light Blue Triangle */}
+            <Polygon points="20,10 0,85 60,100" fill="#39A3DD" />
+            {/* Pink Bow Arc */}
+            <Path d="M40,5 Q85,40 60,100" stroke="#E85874" strokeWidth="8" strokeLinecap="round" fill="none" />
+            {/* Dark Grey Arrow Shaft */}
+            <Polygon points="0,85 15,55 80,25 30,95" fill="#38474F" />
+            {/* Dark Grey Arrow Tail/Head */}
+            <Polygon points="75,25 85,10 100,10 90,25" fill="#38474F" />
+            {/* Light Blue highlight block over the shaft to match the logo */}
+            <Polygon points="20,65 35,55 45,65 25,75" fill="#0284C7" />
           </Svg>
         </View>
       </View>
@@ -1489,10 +1511,10 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ initialNav, onLogout, on
             </View>
 
 
-            {/* ── COMPANY HOLIDAYS ── */}
+            {/* ── UPCOMING HOLIDAYS ── */}
             <View style={{ marginTop: 24, paddingHorizontal: 16 }}>
               <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
-                <Text style={{ fontSize: 16, fontWeight: '800', color: '#1A1F2E' }}>Company Holidays</Text>
+                <Text style={{ fontSize: 16, fontWeight: '800', color: '#1A1F2E' }}>Upcoming Holidays</Text>
                 <TouchableOpacity onPress={() => { if (!checkedIn) Alert.alert("Check-In Required", "Please check-in first.", [{ text: "Cancel", style: "cancel" }, { text: "Check-In", onPress: handleCheckInToggle }]); }}>
                   <Text style={{ fontSize: 14, fontWeight: '600', color: '#39A3DD' }}>View All</Text>
                 </TouchableOpacity>
@@ -1927,12 +1949,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ initialNav, onLogout, on
                       <Text style={profStyles.fieldLabel}>Department</Text>
                       <Text style={profStyles.fieldValueEmpty}>-</Text>
                     </View>
-                    <View style={profStyles.fieldWrap}>
-                      <Text style={profStyles.fieldLabel}>Zoho Role</Text>
-                      <View style={[profStyles.badgeContainer, profStyles.badgeAdmin]}>
-                        <Text style={profStyles.badgeAdminText}>Admin</Text>
-                      </View>
-                    </View>
+
                     <View style={profStyles.fieldWrap}>
                       <Text style={profStyles.fieldLabel}>Location</Text>
                       <Text style={profStyles.fieldValueEmpty}>-</Text>
