@@ -1,14 +1,15 @@
 {
   "expo": {
-    "name": "EnquiryApplication",
-    "slug": "enquiry-application",
+    "name": "Perfect Flow 360",
+    "slug": "perfect-flow-360",
     "version": "1.0.0",
     "platforms": [
       "ios",
       "android"
     ],
+    "icon": "./assets/robot_logo.png",
     "android": {
-      "package": "com.enquiryapp.mobile"
+      "package": "com.perfectflow360.mobile"
     },
     "plugins": [
       "@react-native-community/datetimepicker"
@@ -19,5 +20,5 @@
       }
     }
   },
-  "displayName": "EnquiryApplication"
+  "displayName": "Perfect Flow 360"
 }

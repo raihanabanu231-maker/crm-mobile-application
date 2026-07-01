@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
+import { Image } from 'react-native';
 import { authApi } from '../api/authApi';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as LocalAuthentication from 'expo-local-authentication';
 import {
   ActivityIndicator,
   Alert,
+  Animated,
   KeyboardAvoidingView,
   Platform,
   SafeAreaView,
@@ -23,16 +25,16 @@ import {
 // ==========================================
 const theme = {
   colors: {
-    background: '#F5F7F9',   // Light Gray
-    surface: '#FFFFFF',      // White
-    surfaceLight: '#FDD7E0', // Light Pink for disabled state
-    primary: '#E85874',      // Primary Pink
-    text: '#38474F',         // Dark Gray
-    textMuted: '#8A9BA5',    // Medium Gray
-    textSecondary: '#8A9BA5', // Medium Gray
-    border: '#E5E7EB',
+    background: '#FFFFFF',    // White background
+    surface: '#F5F7FA',       // Light card
+    surfaceLight: '#FCE8EC',  // Light pink tint for disabled
+    primary: '#E85874',       // Primary Pink
+    text: '#1E293B',          // Dark text on white bg
+    textMuted: '#64748B',     // Medium Gray
+    textSecondary: '#475569', // Slate gray
+    border: '#E2E8F0',
     borderFocus: '#39A3DD',   // Primary Blue
-    error: '#C4455D',        // Dark Pink
+    error: '#C4455D',         // Dark Pink
   },
   spacing: {
     xs: 4,
@@ -153,7 +155,7 @@ const inputStyles = StyleSheet.create({
   input: {
     flex: 1,
     height: '100%',
-    color: theme.colors.text,
+    color: '#1E293B',
     fontSize: theme.typography.sizes.md,
     padding: 0,
   },
@@ -250,18 +252,68 @@ interface LoginScreenProps {
 export const LoginScreen: React.FC<LoginScreenProps> = ({ onLoginSuccess }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  
+
   const [emailError, setEmailError] = useState('');
   const [passwordError, setPasswordError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [isBiometricSupported, setIsBiometricSupported] = useState(false);
+
+  const floatAnim = React.useRef(new Animated.Value(0)).current;
+  const logoScaleAnim = React.useRef(new Animated.Value(0.3)).current;
+  const logoOpacityAnim = React.useRef(new Animated.Value(0)).current;
+  const cardSlideAnim = React.useRef(new Animated.Value(50)).current;
+  const cardOpacityAnim = React.useRef(new Animated.Value(0)).current;
 
   React.useEffect(() => {
     (async () => {
       const compatible = await LocalAuthentication.hasHardwareAsync();
       setIsBiometricSupported(compatible);
     })();
-  }, []);
+
+    // Entrance Animations
+    Animated.parallel([
+      Animated.spring(logoScaleAnim, {
+        toValue: 1,
+        tension: 10,
+        friction: 4,
+        useNativeDriver: true,
+      }),
+      Animated.timing(logoOpacityAnim, {
+        toValue: 1,
+        duration: 800,
+        useNativeDriver: true,
+      }),
+      Animated.timing(cardOpacityAnim, {
+        toValue: 1,
+        duration: 600,
+        delay: 300,
+        useNativeDriver: true,
+      }),
+      Animated.spring(cardSlideAnim, {
+        toValue: 0,
+        tension: 20,
+        friction: 7,
+        delay: 300,
+        useNativeDriver: true,
+      }),
+    ]).start();
+
+    // Floating loop animation for logo
+    Animated.loop(
+      Animated.sequence([
+        Animated.timing(floatAnim, {
+          toValue: -12,
+          duration: 2000,
+          useNativeDriver: true,
+        }),
+        Animated.timing(floatAnim, {
+          toValue: 0,
+          duration: 2000,
+          useNativeDriver: true,
+        }),
+      ])
+    ).start();
+  }, [floatAnim, logoScaleAnim, logoOpacityAnim, cardSlideAnim, cardOpacityAnim]);
 
   const handleBiometricLogin = async () => {
     try {
@@ -341,23 +393,23 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({ onLoginSuccess }) => {
 
     try {
       const response = await authApi.login({ email, password });
-      
+
       // Save the token to phone storage
       if (response.token || response.accessToken || response.data?.token) {
         const actualToken = response.token || response.accessToken || response.data?.token;
         await AsyncStorage.setItem('userToken', actualToken);
         await AsyncStorage.setItem('userEmail', email);
         await AsyncStorage.setItem('userPassword', password);
-        
+
         // Fetch the user data behind the scenes
         const userData = await authApi.getMe();
-        
+
         // Here you would typically save `userData` to Redux, Context, or Zustand
         // For now, we will just silently go to the Home screen!
       } else {
         console.warn("No token found in response", response);
       }
-      
+
       setIsLoading(false);
       onLoginSuccess();
     } catch (error: any) {
@@ -378,18 +430,19 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({ onLoginSuccess }) => {
           keyboardShouldPersistTaps="handled"
         >
           {/* Header */}
-          <View style={screenStyles.headerContainer}>
-            <View style={screenStyles.logoBadge}>
-              <Text style={screenStyles.logoText}>EQ</Text>
-            </View>
-            <Text style={screenStyles.appName}>Enquirely</Text>
+          <Animated.View style={[screenStyles.headerContainer, { opacity: logoOpacityAnim, transform: [{ scale: logoScaleAnim }] }]}>
+            <Animated.Image
+              source={require('../../assets/robot_logo.png')}
+              style={[screenStyles.logoImage, { transform: [{ translateY: floatAnim }] }]}
+              resizeMode="contain"
+            />
             <Text style={screenStyles.subtitle}>
-              The premium enquiry management workspace
+              The premium workflow management workspace
             </Text>
-          </View>
+          </Animated.View>
 
           {/* Form Card */}
-          <View style={screenStyles.card}>
+          <Animated.View style={[screenStyles.card, { opacity: cardOpacityAnim, transform: [{ translateY: cardSlideAnim }] }]}>
             <Text style={screenStyles.cardTitle}>Welcome Back</Text>
             <Text style={screenStyles.cardSubtitle}>
               Enter your credentials to access your dashboard
@@ -439,7 +492,7 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({ onLoginSuccess }) => {
             >
               <Text style={screenStyles.biometricButtonText}>Login with Biometrics</Text>
             </TouchableOpacity>
-          </View>
+          </Animated.View>
 
           {/* Footer - Removed Sign Up as per user request */}
           <View style={screenStyles.footerContainer}></View>
@@ -467,30 +520,10 @@ const screenStyles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: theme.spacing.xl,
   },
-  logoBadge: {
-    width: 64,
-    height: 64,
-    backgroundColor: theme.colors.primary,
-    borderRadius: theme.borderRadius.lg,
-    justifyContent: 'center',
-    alignItems: 'center',
+  logoImage: {
+    width: 300,
+    height: 150,
     marginBottom: theme.spacing.md,
-    shadowColor: theme.colors.primary,
-    shadowOffset: { width: 0, height: 6 },
-    shadowOpacity: 0.4,
-    shadowRadius: 10,
-    elevation: 8,
-  },
-  logoText: {
-    color: '#FFF',
-    fontSize: theme.typography.sizes.xl,
-    fontWeight: '800',
-  },
-  appName: {
-    color: theme.colors.text,
-    fontSize: theme.typography.sizes.xxl,
-    fontWeight: '800',
-    letterSpacing: 0.5,
   },
   subtitle: {
     color: theme.colors.textMuted,
@@ -505,11 +538,11 @@ const screenStyles = StyleSheet.create({
     padding: theme.spacing.lg,
     borderWidth: 1,
     borderColor: theme.colors.border,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 10 },
-    shadowOpacity: 0.25,
-    shadowRadius: 15,
-    elevation: 10,
+    shadowColor: '#94A3B8',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.15,
+    shadowRadius: 12,
+    elevation: 6,
   },
   cardTitle: {
     color: theme.colors.text,

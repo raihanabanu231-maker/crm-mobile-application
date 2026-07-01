@@ -8,12 +8,13 @@ import { PolicyScreen } from './src/screens/PolicyScreen';
 import { MessageListScreen } from './src/screens/MessageListScreen';
 import { ChatScreen } from './src/screens/ChatScreen';
 import { VideoCallScreen } from './src/screens/VideoCallScreen';
+import { DailyCallReportScreen } from './src/screens/DailyCallReportScreen';
 import { setupNotifications, scheduleDailyAlarms } from './src/utils/notifications';
 import * as Notifications from 'expo-notifications';
 import { Alert } from 'react-native';
 
 function App() {
-  const [currentScreen, setCurrentScreen] = useState<'LOGIN' | 'HOME' | 'APPLY_LEAVE' | 'SETTINGS' | 'POLICY' | 'MESSAGE_LIST' | 'CHAT' | 'VIDEO_CALL'>('LOGIN');
+  const [currentScreen, setCurrentScreen] = useState<'LOGIN' | 'HOME' | 'APPLY_LEAVE' | 'SETTINGS' | 'POLICY' | 'MESSAGE_LIST' | 'CHAT' | 'VIDEO_CALL' | 'DAILY_CALL_REPORT'>('LOGIN');
   const [selectedLeave, setSelectedLeave] = useState<any>(null);
   const [selectedChatContact, setSelectedChatContact] = useState<any>(null);
   const [initialHomeNav, setInitialHomeNav] = useState('Activities');
@@ -55,6 +56,7 @@ function App() {
             setCurrentScreen('APPLY_LEAVE');
           }}
           onMessagePress={() => setCurrentScreen('MESSAGE_LIST')}
+          onDailyCallReportPress={() => setCurrentScreen('DAILY_CALL_REPORT')}
         />
       )}
       {currentScreen === 'APPLY_LEAVE' && (
@@ -107,6 +109,11 @@ function App() {
         <VideoCallScreen 
           contact={selectedChatContact}
           onEndCall={() => setCurrentScreen('CHAT')}
+        />
+      )}
+      {currentScreen === 'DAILY_CALL_REPORT' && (
+        <DailyCallReportScreen 
+          onBack={() => setCurrentScreen('HOME')}
         />
       )}
     </SafeAreaProvider>

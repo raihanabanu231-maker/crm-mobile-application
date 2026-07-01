@@ -78,9 +78,9 @@ export async function scheduleDailyAlarms() {
       priority: Notifications.AndroidNotificationPriority.MAX,
       categoryIdentifier: 'CHECK_IN_CATEGORY',
       vibrationPattern: [0, 500, 250, 500, 250, 500],
-    },
+    } as any,
     trigger: {
-      type: Notifications.SchedulableTriggerInputTypes.DAILY,
+      type: 'daily' as any,
       hour: 9,
       minute: 30,
     },
@@ -95,9 +95,9 @@ export async function scheduleDailyAlarms() {
       priority: Notifications.AndroidNotificationPriority.MAX,
       categoryIdentifier: 'CHECK_OUT_CATEGORY',
       vibrationPattern: [0, 500, 250, 500, 250, 500],
-    },
+    } as any,
     trigger: {
-      type: Notifications.SchedulableTriggerInputTypes.DAILY,
+      type: 'daily' as any,
       hour: 18,
       minute: 30,
     },
@@ -117,7 +117,7 @@ export async function sendLocalNotification(title: string, body: string) {
       sound: true,
       priority: Notifications.AndroidNotificationPriority.HIGH,
       vibrationPattern: [0, 500, 250, 500, 250, 500],
-    },
+    } as any,
     trigger: null,
   });
 }

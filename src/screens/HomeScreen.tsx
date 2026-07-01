@@ -14,6 +14,8 @@ import {
   Animated,
   Image,
   BackHandler,
+  Linking,
+  Platform,
 } from 'react-native';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import Svg, { Circle, Rect, Path, Line, Polyline, Ellipse, Polygon } from 'react-native-svg';
@@ -27,6 +29,7 @@ import apiClient from '../api/apiClient';
 import { sendLocalNotification } from '../utils/notifications';
 import * as ImagePicker from 'expo-image-picker';
 import * as DocumentPicker from 'expo-document-picker';
+import * as Location from 'expo-location';
 const COLORS = {
   bg: '#F5F7F9',
   white: '#FFFFFF',
@@ -469,6 +472,7 @@ interface HomeScreenProps {
   onSettingsPress?: () => void;
   onApplyLeave?: (leaveData: any) => void;
   onMessagePress?: () => void;
+  onDailyCallReportPress?: () => void;
 }
 
 const getHolidayIcon = (holidayName: string, color: string) => {
@@ -560,12 +564,11 @@ const getHolidayIcon = (holidayName: string, color: string) => {
       </Svg>
     );
   }
-
   // Fallback to text initial
   return <Text style={{ fontSize: 16, fontWeight: 'bold', color }}>{holidayName ? holidayName.charAt(0) : 'H'}</Text>;
 };
 
-export const HomeScreen: React.FC<HomeScreenProps> = ({ initialNav, onLogout, onApplyLeave, onSettingsPress, onMessagePress }) => {
+export const HomeScreen: React.FC<HomeScreenProps> = ({ initialNav, onLogout, onApplyLeave, onSettingsPress, onMessagePress, onDailyCallReportPress }) => {
   const insets = useSafeAreaInsets();
   // Animation for Bottom Tab Bar
   const lastScrollY = useRef(0);
@@ -592,6 +595,25 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ initialNav, onLogout, on
 
     lastScrollY.current = currentScrollY;
   };
+
+  const floatAnim = useRef(new Animated.Value(0)).current;
+
+  useEffect(() => {
+    Animated.loop(
+      Animated.sequence([
+        Animated.timing(floatAnim, {
+          toValue: -8, // subtle float
+          duration: 2000,
+          useNativeDriver: true,
+        }),
+        Animated.timing(floatAnim, {
+          toValue: 0,
+          duration: 2000,
+          useNativeDriver: true,
+        }),
+      ])
+    ).start();
+  }, [floatAnim]);
 
   const [activeTab, setActiveTab] = useState('My Space');
   const [activeNav, setActiveNav] = useState(initialNav || 'Activities');
@@ -655,6 +677,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ initialNav, onLogout, on
   const [pendingTeamRegularizations, setPendingTeamRegularizations] = useState<any[]>([]);
   const [loadingApprovals, setLoadingApprovals] = useState(false);
   const [hasNotifiedAdmin, setHasNotifiedAdmin] = useState(false);
+  const [isProcessingCheckIn, setIsProcessingCheckIn] = useState(false);
 
   const addFileToProfile = (file: { uri: string, type: string, name: string }) => {
     const currentFiles = editProfileData.certificationsFiles || [];
@@ -999,18 +1022,36 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ initialNav, onLogout, on
 
         let previousSeconds = 0;
         if (todayRecord.totalHours) {
-          previousSeconds = Math.floor(todayRecord.totalHours * 3600);
+          if (typeof todayRecord.totalHours === 'number') {
+            previousSeconds = Math.floor(todayRecord.totalHours * 3600);
+          } else if (typeof todayRecord.totalHours === 'string') {
+            if (todayRecord.totalHours.includes(':')) {
+               const parts = todayRecord.totalHours.split(':');
+               previousSeconds = (parseInt(parts[0]) || 0) * 3600 + (parseInt(parts[1]) || 0) * 60;
+            } else {
+               previousSeconds = Math.floor((parseFloat(todayRecord.totalHours) || 0) * 3600);
+            }
+          }
+          if (isNaN(previousSeconds)) previousSeconds = 0;
         }
 
         if (todayRecord.sessions && todayRecord.sessions.length > 0) {
           setSessionLogs(todayRecord.sessions);
-          const lastSession = todayRecord.sessions[todayRecord.sessions.length - 1];
+          // Find if ANY session in the array is currently active (missing a checkout time)
+          const isSessionClosed = (s: any) => s.checkOut || s.checkout || s.checkOutTime || s.endTime;
+          const activeSession = todayRecord.sessions.find((s: any) => !isSessionClosed(s));
+          const targetSession = activeSession || todayRecord.sessions[todayRecord.sessions.length - 1];
 
-          // Check multiple possible property names from the backend
-          let hasCheckedOut = lastSession.checkOut || lastSession.checkout || lastSession.checkOutTime || lastSession.endTime;
+          let hasCheckedOut = !activeSession;
 
-          const checkInDate = new Date(lastSession.checkIn || lastSession.checkin || lastSession.startTime);
-          const currentSessionSeconds = Math.floor((new Date().getTime() - checkInDate.getTime()) / 1000);
+          const checkInRaw = targetSession.checkIn || targetSession.checkin || targetSession.startTime || targetSession.checkInTime;
+          let currentSessionSeconds = 0;
+          if (checkInRaw) {
+            const checkInDate = new Date(checkInRaw);
+            if (!isNaN(checkInDate.getTime())) {
+              currentSessionSeconds = Math.floor((new Date().getTime() - checkInDate.getTime()) / 1000);
+            }
+          }
 
           // BUGFIX: The Windows backend sometimes marks the day as 'Present' but fails to save the checkout 
           // timestamp inside the session object. If a session has no checkout time but is over 24 hours old, 
@@ -1093,53 +1134,155 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ initialNav, onLogout, on
   }, [activeTab, activeTeamNav, user]);
 
   const handleCheckInToggle = async () => {
+    if (isProcessingCheckIn) return;
+    setIsProcessingCheckIn(true);
     try {
       if (checkedIn) {
-        // Try the default POST /check-out first
+        // ── CHECKOUT: optionally send last known location ──
         try {
-          await attendanceApi.checkOut();
-        } catch (e: any) {
-          console.log("Standard POST /check-out failed, trying alternatives...", e.message);
-          // Fallback 1: Try PUT /check-out
+          // Try to get location for checkout too (backend now accepts it)
+          let checkOutLocation: { lat: number; lng: number; address?: string } | undefined;
           try {
-            await apiClient('/attendance/check-out', { method: 'PUT' });
-          } catch (e2) {
-            // Fallback 2: Try POST /checkout (no hyphen)
-            try {
-              await apiClient('/attendance/checkout', { method: 'POST' });
-            } catch (e3) {
-              // Fallback 3: Try PUT /checkout (no hyphen)
+            const locPerms = await Location.getForegroundPermissionsAsync();
+            if (locPerms.status === 'granted') {
+              let loc = await Location.getLastKnownPositionAsync();
+              if (!loc) {
+                loc = await Promise.race([
+                  Location.getCurrentPositionAsync({ accuracy: Location.Accuracy.Balanced }),
+                  new Promise<any>((_, reject) => setTimeout(() => reject(new Error('Timeout')), 5000))
+                ]);
+              }
+              if (loc) {
+                const geocode = await Location.reverseGeocodeAsync({
+                  latitude: loc.coords.latitude,
+                  longitude: loc.coords.longitude,
+                });
+                const g = geocode[0];
+                const address = g
+                  ? [g.name, g.street, g.district, g.city, g.region].filter(Boolean).join(', ')
+                  : undefined;
+                checkOutLocation = { lat: loc.coords.latitude, lng: loc.coords.longitude, address };
+              }
+            }
+          } catch (_) { /* location optional on checkout */ }
+
+          await attendanceApi.checkOut(checkOutLocation);
+        } catch (e: any) {
+          console.log('Standard check-out failed, trying alternatives...', e.message);
+          try { await apiClient('/attendance/check-out', { method: 'PUT' }); } catch (e2) {
+            try { await apiClient('/attendance/checkout', { method: 'POST' }); } catch (e3) {
               await apiClient('/attendance/checkout', { method: 'PUT' });
             }
           }
         }
         setCheckedIn(false);
-        fetchAttendance(); // Re-sync exact time from server
+        setTimeout(fetchAttendance, 1500);
       } else {
-        await attendanceApi.checkIn();
+        // ── CHECK-IN: require location ──
+
+        // 1. Check if location services are enabled
+        const serviceEnabled = await Location.hasServicesEnabledAsync();
+        if (!serviceEnabled) {
+          Alert.alert(
+            '📍 Location is Off',
+            'Your device GPS/Location is turned OFF.\n\nPlease enable Location Services to check in.',
+            [
+              { text: 'Cancel', style: 'cancel' },
+              {
+                text: '⚙️ Enable Location',
+                onPress: () => {
+                  if (Platform.OS === 'android') {
+                    Linking.sendIntent('android.settings.LOCATION_SOURCE_SETTINGS').catch(() =>
+                      Linking.openSettings()
+                    );
+                  } else {
+                    Linking.openURL('App-Prefs:Privacy&path=LOCATION').catch(() =>
+                      Linking.openSettings()
+                    );
+                  }
+                },
+              },
+            ]
+          );
+          return;
+        }
+
+        // 2. Request permission
+        const { status } = await Location.requestForegroundPermissionsAsync();
+        if (status !== 'granted') {
+          Alert.alert(
+            '📍 Permission Denied',
+            'Location permission is required to check in. Please allow location access in your device settings.',
+            [{ text: 'OK' }]
+          );
+          return;
+        }
+
+        // 3. Get coordinates (with 10-second timeout to avoid freeze)
+        let loc: any = null;
+        try {
+          loc = await Promise.race([
+            Location.getCurrentPositionAsync({ accuracy: Location.Accuracy.Balanced }),
+            new Promise<any>((_, reject) => setTimeout(() => reject(new Error('Timeout getting location')), 10000))
+          ]);
+        } catch (locErr) {
+          // If it times out, try last known
+          try {
+            loc = await Location.getLastKnownPositionAsync();
+          } catch (e) {}
+        }
+
+        if (!loc) {
+          Alert.alert("GPS Warning", "Could not get your exact location. Checking in without GPS coordinates.");
+        }
+
+        let address: string | undefined;
+        if (loc) {
+          try {
+            const geocode = await Location.reverseGeocodeAsync({
+              latitude: loc.coords.latitude,
+              longitude: loc.coords.longitude,
+            });
+            const g = geocode[0];
+            if (g) {
+              address = [g.name, g.street, g.district, g.city, g.region, g.country]
+                .filter(Boolean)
+                .join(', ');
+            }
+          } catch (_) { /* address is optional — check-in will still work */ }
+        }
+
+        // 5. Check in with { lat, lng, address } format (or empty if GPS failed)
+        const locationPayload = loc ? {
+          lat: loc.coords.latitude,
+          lng: loc.coords.longitude,
+          address,
+        } : undefined;
+
+        const res = await attendanceApi.checkIn(locationPayload);
+        Alert.alert("Debug API Response", JSON.stringify(res));
+        
         setCheckedIn(true);
-        fetchAttendance(); // Re-sync exact time from server
+        // Do not immediately fetch attendance to prevent UI bouncing if server is slow
+        setTimeout(fetchAttendance, 2000);
       }
     } catch (err: any) {
-      const errorMsg = err.message || "";
-      console.log("Check-in/out error details:", errorMsg);
+      const errorMsg = err.message || '';
+      console.log('Check-in/out error details:', errorMsg);
 
-      // If the backend yells at us that we are already checked in, flip the button automatically!
-      if (errorMsg.toLowerCase().includes("active session") || errorMsg.toLowerCase().includes("already")) {
-        Alert.alert("Synced!", "You were already checked in on the server! We updated your button to say Check-Out.");
+      if (errorMsg.toLowerCase().includes('active session')) {
+        Alert.alert('Synced!', 'You were already checked in on the server! We updated your button to say Check-Out.');
         setCheckedIn(true);
-        fetchAttendance();
+        setTimeout(fetchAttendance, 2000);
+      } else if (errorMsg.toLowerCase().includes('maximum')) {
+        Alert.alert('Shift Limit Reached', 'You have reached the maximum number of check-ins allowed for today (5 sessions).');
+        setCheckedIn(false);
       } else {
-        // Detect if this is a stuck session (like the 47 hour one)
-        if (seconds > 86400) { // More than 24 hours
-          Alert.alert(
-            "Session Stuck",
-            `Your check-in is from over 24 hours ago. The server might not allow a normal checkout.\n\nPlease use the Regularize button (the green circle icon at the top) to fix this missed punch.\n\nServer Error: ${errorMsg}`
-          );
-        } else {
-          Alert.alert("Error", `Could not update attendance status.\nDetails: ${errorMsg}`);
-        }
+        Alert.alert('Check-In Failed', errorMsg || 'Could not update attendance status on the server.');
+        setCheckedIn(false);
       }
+    } finally {
+      setIsProcessingCheckIn(false);
     }
   };
 
@@ -1220,6 +1363,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ initialNav, onLogout, on
   }, [checkedIn]);
 
   const formatTimer = (s: number) => {
+    if (isNaN(s)) s = 0;
     const h = String(Math.floor(s / 3600)).padStart(2, '0');
     const m = String(Math.floor((s % 3600) / 60)).padStart(2, '0');
     const sec = String(s % 60).padStart(2, '0');
@@ -1285,12 +1429,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ initialNav, onLogout, on
 
         {/* Right: Search + Bell + Clock (Regularization) */}
         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 12 }}>
-          <TouchableOpacity
-            style={{ width: 44, height: 44, borderRadius: 22, backgroundColor: '#F3F4F6', justifyContent: 'center', alignItems: 'center' }}
-            onPress={() => { if (!checkedIn) { Alert.alert("Check-In Required", "Please check-in first.", [{ text: "Cancel", style: "cancel" }, { text: "Check-In", onPress: handleCheckInToggle }]); return; } }}
-          >
-            <Svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1A1F2E" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><Circle cx="11" cy="11" r="8" /><Line x1="21" y1="21" x2="16.65" y2="16.65" /></Svg>
-          </TouchableOpacity>
+
           <TouchableOpacity
             style={{ width: 44, height: 44, borderRadius: 22, backgroundColor: '#F3F4F6', justifyContent: 'center', alignItems: 'center', position: 'relative' }}
             onPress={() => { if (!checkedIn) { Alert.alert("Check-In Required", "Please check-in first.", [{ text: "Cancel", style: "cancel" }, { text: "Check-In", onPress: handleCheckInToggle }]); return; } }}
@@ -1307,31 +1446,42 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ initialNav, onLogout, on
           >
             <Svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1A1F2E" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><Circle cx="12" cy="12" r="10" /><Polyline points="12 6 12 12 16 14" /></Svg>
           </TouchableOpacity>
+          <TouchableOpacity
+            style={{ width: 44, height: 44, borderRadius: 22, backgroundColor: '#FEE2E2', justifyContent: 'center', alignItems: 'center' }}
+            onPress={() => {
+              Alert.alert("Logout", "Are you sure you want to sign out?", [
+                { text: "Cancel", style: "cancel" },
+                { text: "Logout", style: "destructive", onPress: onLogout }
+              ]);
+            }}
+          >
+            <Svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#EF4444" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <Path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+              <Polyline points="16 17 21 12 16 7" />
+              <Line x1="21" y1="12" x2="9" y2="12" />
+            </Svg>
+          </TouchableOpacity>
         </View>
       </View>
 
       {/* Blue Hero Card */}
-      <View style={{ marginHorizontal: 16, backgroundColor: '#39A3DD', borderRadius: 24, padding: 24, paddingRight: 100, position: 'relative', overflow: 'hidden', marginBottom: 20 }}>
+      <View style={{ marginHorizontal: 16, backgroundColor: '#39A3DD', borderRadius: 24, padding: 24, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', position: 'relative', overflow: 'hidden', marginBottom: 20 }}>
         {/* Abstract background shapes */}
         <View style={{ position: 'absolute', top: -50, right: -50, width: 200, height: 200, borderRadius: 100, backgroundColor: 'rgba(255,255,255,0.15)' }} />
         <View style={{ position: 'absolute', bottom: -30, left: 30, width: 100, height: 100, borderRadius: 50, backgroundColor: 'rgba(255,255,255,0.1)' }} />
 
-        <Text style={{ fontSize: 24, fontWeight: '700', color: '#FFF', lineHeight: 34 }}>Stay productive and{"\n"}make today count!</Text>
+        <Text style={{ flex: 1, fontSize: 23, fontWeight: '700', color: '#FFF', lineHeight: 32, marginRight: 16 }}>Stay productive{"\n"}and make today count!</Text>
 
         {/* ATPL Logo Illustration */}
-        <View style={{ position: 'absolute', right: 10, top: '50%', marginTop: -45 }}>
-          <Svg width="90" height="90" viewBox="0 0 100 100" fill="none">
-            {/* Light Blue Triangle */}
-            <Polygon points="20,10 0,85 60,100" fill="#39A3DD" />
-            {/* Pink Bow Arc */}
-            <Path d="M40,5 Q85,40 60,100" stroke="#E85874" strokeWidth="8" strokeLinecap="round" fill="none" />
-            {/* Dark Grey Arrow Shaft */}
-            <Polygon points="0,85 15,55 80,25 30,95" fill="#38474F" />
-            {/* Dark Grey Arrow Tail/Head */}
-            <Polygon points="75,25 85,10 100,10 90,25" fill="#38474F" />
-            {/* Light Blue highlight block over the shaft to match the logo */}
-            <Polygon points="20,65 35,55 45,65 25,75" fill="#0284C7" />
-          </Svg>
+        <View style={{ 
+          width: 110, height: 110, borderRadius: 55, backgroundColor: '#FFF',
+          justifyContent: 'center', alignItems: 'center',
+          shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.1, shadowRadius: 4, elevation: 3
+        }}>
+          <Image 
+            source={require('../../assets/archery_logo.png')} 
+            style={{ width: 75, height: 75, resizeMode: 'contain' }} 
+          />
         </View>
       </View>
 
@@ -1465,12 +1615,16 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ initialNav, onLogout, on
                 </Text>
 
                 <TouchableOpacity
-                  style={{ backgroundColor: checkedIn ? '#EF4444' : '#39A3DD', borderRadius: 100, paddingVertical: 12, alignItems: 'center' }}
+                  style={{ backgroundColor: checkedIn ? '#EF4444' : '#39A3DD', borderRadius: 100, paddingVertical: 12, alignItems: 'center', flexDirection: 'row', justifyContent: 'center' }}
                   activeOpacity={0.8}
                   onPress={handleCheckInToggle}
+                  disabled={isProcessingCheckIn}
                 >
+                  {isProcessingCheckIn ? (
+                    <ActivityIndicator size="small" color="#FFF" style={{ marginRight: 8 }} />
+                  ) : null}
                   <Text style={{ color: '#FFF', fontSize: 14, fontWeight: '700' }}>
-                    {checkedIn ? 'Check-Out' : 'Check-In'}
+                    {isProcessingCheckIn ? 'Processing...' : checkedIn ? 'Check-Out' : 'Check-In'}
                   </Text>
                 </TouchableOpacity>
               </View>
@@ -2217,13 +2371,18 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ initialNav, onLogout, on
           <Text style={{ fontSize: 10, marginTop: 4, fontWeight: '600', color: bottomTab === 'Directory' ? '#39A3DD' : '#9CA3AF' }}>Directory</Text>
         </TouchableOpacity>
 
-        {/* Floating Center Button */}
+        {/* Floating Center Button - Daily Call Report */}
         <View style={{ flex: 1, alignItems: 'center' }}>
           <View style={{ position: 'absolute', top: -35, width: 60, height: 60, borderRadius: 30, backgroundColor: '#FFF', padding: 6, shadowColor: '#000', shadowOffset: { width: 0, height: -2 }, shadowOpacity: 0.1, shadowRadius: 6, elevation: 8 }}>
-            <TouchableOpacity style={{ width: '100%', height: '100%', borderRadius: 24, backgroundColor: '#39A3DD', justifyContent: 'center', alignItems: 'center', shadowColor: '#39A3DD', shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.3, shadowRadius: 8, elevation: 5 }}>
-              <Svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#FFF" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                <Line x1="12" y1="5" x2="12" y2="19" />
-                <Line x1="5" y1="12" x2="19" y2="12" />
+            <TouchableOpacity 
+              onPress={() => {
+                if (!checkedIn) { Alert.alert("Access Denied", "Please check-in first."); return; }
+                if (onDailyCallReportPress) onDailyCallReportPress();
+              }}
+              style={{ width: '100%', height: '100%', borderRadius: 24, backgroundColor: '#10B981', justifyContent: 'center', alignItems: 'center', shadowColor: '#10B981', shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.3, shadowRadius: 8, elevation: 5 }}>
+              {/* Phone + notepad icon representing Daily Call Report */}
+              <Svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#FFF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <Path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.27h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L7.91 8.91A16 16 0 0 0 15.09 16.09l.95-.95a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 17.92z" />
               </Svg>
             </TouchableOpacity>
           </View>
