@@ -680,7 +680,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ initialNav, onLogout, on
   const [isProcessingCheckIn, setIsProcessingCheckIn] = useState(false);
 
   const addFileToProfile = (file: { uri: string, type: string, name: string }) => {
-    const currentFiles = editProfileData.certificationsFiles || [];
+    const currentFiles = Array.isArray(editProfileData.certificationsFiles) ? editProfileData.certificationsFiles : [];
     setEditProfileData({
       ...editProfileData,
       certificationsFiles: [...currentFiles, file]
@@ -1260,7 +1260,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ initialNav, onLogout, on
         } : undefined;
 
         const res = await attendanceApi.checkIn(locationPayload);
-        Alert.alert("Debug API Response", JSON.stringify(res));
+        Alert.alert("Success", "Checked in successfully!");
         
         setCheckedIn(true);
         // Do not immediately fetch attendance to prevent UI bouncing if server is slow
@@ -1933,7 +1933,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ initialNav, onLogout, on
                 <Text style={profStyles.profileGreeting}>Good Evening, {user ? user.firstName : '...'}</Text>
                 <Text style={profStyles.profileName}>{user ? `${user.firstName} ${user.lastName}` : '...'}</Text>
                 <View style={profStyles.profileRoleTag}>
-                  <Text style={profStyles.profileRoleTagText}>{user ? (user.designation || 'EMPLOYEE').toUpperCase() : '...'}</Text>
+                  <Text style={profStyles.profileRoleTagText}>{user ? (String(user.designation || 'EMPLOYEE')).toUpperCase() : '...'}</Text>
                 </View>
 
                 <TouchableOpacity
@@ -2242,7 +2242,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ initialNav, onLogout, on
                   )}
                   {/* Display uploaded files */}
                   <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ marginTop: 12 }}>
-                    {(isEditingProfile ? (editProfileData.certificationsFiles || []) : (user?.certificationsFiles || [])).map((file: any, idx: number) => (
+                    {(Array.isArray(isEditingProfile ? editProfileData.certificationsFiles : user?.certificationsFiles) ? (isEditingProfile ? editProfileData.certificationsFiles : user?.certificationsFiles) : []).map((file: any, idx: number) => (
                       <View key={idx} style={{ marginRight: 12, position: 'relative', marginTop: 8 }}>
                         {file.type === 'image' ? (
                           <Image source={{ uri: file.uri }} style={{ width: 80, height: 80, borderRadius: 8, backgroundColor: '#E5E7EB' }} />

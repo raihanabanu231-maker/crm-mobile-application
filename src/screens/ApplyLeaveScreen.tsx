@@ -109,10 +109,8 @@ export const ApplyLeaveScreen: React.FC<ApplyLeaveScreenProps> = ({
         status: 'pending'
       };
 
-      // Hits POST /api/leaves
       const res = await leaveApi.applyForLeave(payload);
-
-      Alert.alert("Debug API Response", JSON.stringify(res, null, 2));
+      Alert.alert("Success", "Leave applied successfully!");
       onSubmit(); // Call the parent callback to navigate back
     } catch (error: any) {
       console.warn("Failed to apply for leave", error);

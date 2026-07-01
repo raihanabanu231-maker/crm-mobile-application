@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   ScrollView,
   StyleSheet,
@@ -13,6 +13,7 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Svg, { Path, Circle, Rect, Line } from 'react-native-svg';
+import { authApi } from '../api/authApi';
 
 const COLORS = {
   bg: '#F5F7F9', // Light Gray
@@ -47,6 +48,22 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({ onBack, onLogout
   const languages = ['English', 'Spanish', 'French', 'German', 'Hindi', 'Tamil'];
   const themes = ['System Default', 'Light Mode', 'Dark Mode'];
 
+  const [user, setUser] = useState<any>(null);
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const userData = await authApi.getMe();
+        if (userData && userData.data) {
+          setUser(userData.data);
+        }
+      } catch (error) {
+        console.error("Failed to fetch user data in settings", error);
+      }
+    };
+    fetchUserData();
+  }, []);
+
   return (
     <SafeAreaView style={styles.safeArea}>
       <StatusBar barStyle="dark-content" backgroundColor={COLORS.bg} />
@@ -72,8 +89,8 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({ onBack, onLogout
             {/* Using a placeholder SVG or color block for avatar since we don't have the image file */}
             <View style={styles.avatarPlaceholderHero} />
           </View>
-          <Text style={styles.heroProfileName}>Abishek Sivaraj</Text>
-          <Text style={styles.heroProfileEmail}>abishek.sivaraj@atplgroup.com</Text>
+          <Text style={styles.heroProfileName}>{user ? `${user.firstName} ${user.lastName || ''}`.trim() : 'Loading...'}</Text>
+          <Text style={styles.heroProfileEmail}>{user ? user.email : ''}</Text>
           <TouchableOpacity style={styles.viewProfileBtnHero} activeOpacity={0.8} onPress={onViewProfile}>
             <Text style={styles.viewProfileTextHero}>View Profile</Text>
           </TouchableOpacity>

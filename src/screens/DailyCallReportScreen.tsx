@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
 import {
-  SafeAreaView, ScrollView, View, Text, TextInput,
+  ScrollView, View, Text, TextInput,
   TouchableOpacity, ActivityIndicator, StyleSheet,
   Modal, Alert, Platform,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import Svg, { Polyline, Path, Circle, Rect } from 'react-native-svg';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import apiClient from '../api/apiClient';
