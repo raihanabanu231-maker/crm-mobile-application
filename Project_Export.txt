@@ -1,373 +1,82 @@
-# Project Export
+﻿
 
-## 1. Project Overview
-This is an Enterprise HR and Attendance Management Application built with React Native and Expo. It includes attendance tracking, leave management, team approvals, company feeds, and organization directory.
+================================================
+--- File: D:\Enquiry_Application\.eslintrc.js ---
+================================================
 
-## 2. Packages and Dependencies
-```json
+module.exports = {
+  root: true,
+  extends: '@react-native',
+};
+
+
+
+================================================
+--- File: D:\Enquiry_Application\.prettierrc.js ---
+================================================
+
+module.exports = {
+  arrowParens: 'avoid',
+  singleQuote: true,
+  trailingComma: 'all',
+};
+
+
+
+================================================
+--- File: D:\Enquiry_Application\app.json ---
+================================================
+
 {
-  "dependencies": {
-    "@react-native-async-storage/async-storage": "2.2.0",
-    "@react-native-community/datetimepicker": "8.4.4",
-    "@react-native/new-app-screen": "0.81.5",
-    "babel-preset-expo": "~54.0.10",
-    "expo": "^54.0.35",
-    "expo-device": "~8.0.10",
-    "expo-document-picker": "~14.0.8",
-    "expo-image-picker": "~17.0.11",
-    "expo-notifications": "~0.32.17",
-    "react": "19.1.0",
-    "react-native": "0.81.5",
-    "react-native-safe-area-context": "~5.6.0",
-    "react-native-svg": "15.12.1",
-    "socket.io-client": "^4.6.1"
+  "expo": {
+    "name": "Perfect Flow 360",
+    "slug": "enquiry-application",
+    "version": "1.0.0",
+    "platforms": [
+      "ios",
+      "android"
+    ],
+    "icon": "./assets/robot_logo.png",
+    "android": {
+      "package": "com.perfectflow360.mobile",
+      "permissions": [
+        "android.permission.USE_BIOMETRIC",
+        "android.permission.USE_FINGERPRINT",
+        "android.permission.ACCESS_COARSE_LOCATION",
+        "android.permission.ACCESS_FINE_LOCATION"
+      ]
+    },
+    "ios": {
+      "infoPlist": {
+        "NSFaceIDUsageDescription": "Allow Perfect Flow 360 to use Face ID for secure login.",
+        "NSLocationWhenInUseUsageDescription": "Perfect Flow 360 needs your location to verify check-in.",
+        "NSLocationAlwaysUsageDescription": "Perfect Flow 360 needs your location to verify check-in."
+      }
+    },
+    "plugins": [
+      "expo-local-authentication",
+      [
+        "expo-location",
+        {
+          "locationAlwaysAndWhenInUsePermission": "Allow Perfect Flow 360 to use your location for attendance check-in."
+        }
+      ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "e715dc5c-4633-4b41-823e-5f99a40d6951"
+      }
+    }
   },
-  "devDependencies": {
-    "@babel/core": "^7.25.2",
-    "@babel/preset-env": "^7.25.3",
-    "@babel/runtime": "^7.25.0",
-    "@react-native-community/cli": "20.1.0",
-    "@react-native-community/cli-platform-android": "20.1.0",
-    "@react-native-community/cli-platform-ios": "20.1.0",
-    "@react-native/babel-preset": "0.81.5",
-    "@react-native/eslint-config": "0.81.5",
-    "@react-native/metro-config": "0.81.5",
-    "@react-native/typescript-config": "0.81.5",
-    "@types/jest": "^29.5.13",
-    "@types/react": "~19.1.10",
-    "@types/react-test-renderer": "~19.1.0",
-    "eslint": "^8.19.0",
-    "jest": "^29.6.3",
-    "prettier": "2.8.8",
-    "react-test-renderer": "19.1.0",
-    "typescript": "~5.9.2"
-  }
+  "displayName": "Perfect Flow 360"
 }
-```
 
-## 3. Complete Folder Structure
-```text
-├── android
-│   ├── app
-│   │   ├── build.gradle
-│   │   ├── debug.keystore
-│   │   ├── proguard-rules.pro
-│   │   └── src
-│   │       └── main
-│   │           ├── AndroidManifest.xml
-│   │           ├── java
-│   │           │   └── com
-│   │           │       └── enquiryapplication
-│   │           │           ├── MainActivity.kt
-│   │           │           └── MainApplication.kt
-│   │           └── res
-│   │               ├── drawable
-│   │               │   └── rn_edit_text_material.xml
-│   │               ├── mipmap-hdpi
-│   │               │   ├── ic_launcher.png
-│   │               │   └── ic_launcher_round.png
-│   │               ├── mipmap-mdpi
-│   │               │   ├── ic_launcher.png
-│   │               │   └── ic_launcher_round.png
-│   │               ├── mipmap-xhdpi
-│   │               │   ├── ic_launcher.png
-│   │               │   └── ic_launcher_round.png
-│   │               ├── mipmap-xxhdpi
-│   │               │   ├── ic_launcher.png
-│   │               │   └── ic_launcher_round.png
-│   │               ├── mipmap-xxxhdpi
-│   │               │   ├── ic_launcher.png
-│   │               │   └── ic_launcher_round.png
-│   │               └── values
-│   │                   ├── strings.xml
-│   │                   └── styles.xml
-│   ├── build.gradle
-│   ├── gradle
-│   │   └── wrapper
-│   │       ├── gradle-wrapper.jar
-│   │       └── gradle-wrapper.properties
-│   ├── gradle.properties
-│   ├── gradlew
-│   ├── gradlew.bat
-│   └── settings.gradle
-├── app.json
-├── App.tsx
-├── babel.config.js
-├── Detailed_Project_Export.md
-├── exportProject.js
-├── Gemfile
-├── index.js
-├── ios
-│   ├── EnquiryApplication
-│   │   ├── AppDelegate.swift
-│   │   ├── Images.xcassets
-│   │   │   ├── AppIcon.appiconset
-│   │   │   │   └── Contents.json
-│   │   │   └── Contents.json
-│   │   ├── Info.plist
-│   │   ├── LaunchScreen.storyboard
-│   │   └── PrivacyInfo.xcprivacy
-│   ├── EnquiryApplication.xcodeproj
-│   │   ├── project.pbxproj
-│   │   └── xcshareddata
-│   │       └── xcschemes
-│   │           └── EnquiryApplication.xcscheme
-│   └── Podfile
-├── jest.config.js
-├── metro.config.js
-├── package-lock.json
-├── package.json
-├── README.md
-├── src
-│   ├── api
-│   │   ├── activityApi.ts
-│   │   ├── apiClient.ts
-│   │   ├── attendanceApi.ts
-│   │   ├── authApi.ts
-│   │   ├── holidayApi.ts
-│   │   ├── leaveApi.ts
-│   │   └── wishesApi.ts
-│   ├── components
-│   ├── screens
-│   │   ├── ApplyLeaveScreen.tsx
-│   │   ├── ChatScreen.tsx
-│   │   ├── HomeScreen.tsx
-│   │   ├── LoginScreen.tsx
-│   │   ├── MessageListScreen.tsx
-│   │   ├── PolicyScreen.tsx
-│   │   ├── SettingsScreen.tsx
-│   │   └── VideoCallScreen.tsx
-│   ├── theme
-│   └── utils
-│       └── notifications.ts
-├── tsconfig.json
-└── __tests__
-    └── App.test.tsx
-```
 
-## 4. All Features Explained
-- **Attendance Management:** Check-in/out with a live timer, regularization for missed punches.
-- **Leave Management:** View leave balances, upcoming company holidays, and apply for leave.
-- **Team Approvals:** Managers can approve/reject regularization requests and view team hierarchy.
-- **Internal Feeds:** View announcements, birthdays, and work anniversaries.
-- **Organization Directory:** Search and filter all employees.
-- **Real-time Notifications:** Local push notifications for check-ins, check-outs, and manager approvals.
 
-## 5. All APIs and Services
-### activityApi.ts
-```typescript
-// src/api/activityApi.ts
-import apiClient from './apiClient';
+================================================
+--- File: D:\Enquiry_Application\App.tsx ---
+================================================
 
-export const activityApi = {
-  // GET /api/activities
-  getActivities: () => apiClient('/activities'),
-  
-  // POST /api/activities/:id/comment
-  addComment: (id: string, text: string) => apiClient(`/activities/${id}/comment`, { 
-    method: 'POST', 
-    body: JSON.stringify({ text }) 
-  }),
-  
-  // POST /api/activities/:id/react
-  reactToActivity: (id: string, type: string = 'like') => apiClient(`/activities/${id}/react`, { 
-    method: 'POST', 
-    body: JSON.stringify({ type }) 
-  }),
-};
-
-```
-
-### apiClient.ts
-```typescript
-import AsyncStorage from '@react-native-async-storage/async-storage';
-
-// You can swap this to the production URL later
-// const BASE_URL = 'http://localhost:5000/api'; 
-// const BASE_URL = 'http://10.0.2.2:5000/api'; // Use this if you are testing on an Android Emulator
-//const BASE_URL = 'http://192.168.1.8:5000/api'; // Testing on physical phone
-const BASE_URL = 'https://atpl-enquiry-application.onrender.com/api';
-
-const apiClient = async (endpoint: string, options: RequestInit = {}) => {
-  const token = await AsyncStorage.getItem('userToken');
-  
-  const headers = new Headers(options.headers);
-  if (!headers.has('Content-Type')) {
-    headers.set('Content-Type', 'application/json');
-  }
-  if (token) {
-    headers.set('Authorization', `Bearer ${token}`);
-  }
-
-  const response = await fetch(`${BASE_URL}${endpoint}`, {
-    ...options,
-    headers,
-  });
-
-  if (!response.ok) {
-    const errorData = await response.json().catch(() => ({}));
-    throw new Error(errorData.message || 'API request failed');
-  }
-
-  const responseData = await response.json();
-  console.log('API Response data:', endpoint, responseData);
-  return responseData;
-};
-
-export default apiClient;
-
-```
-
-### attendanceApi.ts
-```typescript
-// src/api/attendanceApi.ts
-import apiClient from './apiClient';
-
-export const attendanceApi = {
-  checkIn: () => apiClient('/attendance/check-in', { method: 'POST' }),
-  checkOut: () => apiClient('/attendance/check-out', { method: 'POST' }),
-  getMyAttendance: () => apiClient(`/attendance/my?t=${Date.now()}`),
-  regularize: (id: string, data: any) => apiClient(`/attendance/regularize/${id}`, { 
-    method: 'POST',
-    body: JSON.stringify(data)
-  }),
-  getTeamStatus: () => apiClient('/attendance/team-status'),
-  getOrgReport: () => apiClient('/attendance/organization-report'),
-  getPendingRegularizations: () => apiClient('/attendance/pending-regularizations'),
-  approveRegularization: (id: string) => apiClient(`/attendance/approve-regularization/${id}`, { method: 'PUT' }),
-};
-
-```
-
-### authApi.ts
-```typescript
-// src/api/authApi.ts
-import apiClient from './apiClient';
-
-export const authApi = {
-  // GET /api/auth/system-status
-  getSystemStatus: () => apiClient('/auth/system-status'),
-
-  // POST /api/auth/register
-  register: (data: any) => apiClient('/auth/register', {
-    method: 'POST',
-    body: JSON.stringify(data),
-  }),
-
-  // POST /api/auth/login
-  login: (data: any) => apiClient('/auth/login', { 
-    method: 'POST', 
-    body: JSON.stringify(data) 
-  }),
-  
-  // GET /api/auth/invite/:token
-  getInviteByToken: (token: string) => apiClient(`/auth/invite/${token}`),
-
-  // POST /api/auth/signup/:token
-  signupWithToken: (token: string, data: any) => apiClient(`/auth/signup/${token}`, {
-    method: 'POST',
-    body: JSON.stringify(data),
-  }),
-
-  // GET /api/auth/me
-  getMe: () => apiClient('/auth/me'),
-
-  // GET /api/auth/celebrations
-  getCelebrations: () => apiClient('/auth/celebrations'),
-
-  // PUT /api/auth/profile
-  updateProfile: (data: any) => apiClient('/auth/profile', {
-    method: 'PUT',
-    body: JSON.stringify(data),
-  }),
-
-  // GET /api/auth/users
-  getUsers: () => apiClient('/auth/users'),
-
-  // PUT /api/auth/users/:id
-  updateUser: (id: string, data: any) => apiClient(`/auth/users/${id}`, {
-    method: 'PUT',
-    body: JSON.stringify(data),
-  }),
-
-  // DELETE /api/auth/users/:id
-  deleteUser: (id: string) => apiClient(`/auth/users/${id}`, {
-    method: 'DELETE',
-  }),
-
-  // POST /api/auth/invite
-  createInvite: (data: any) => apiClient('/auth/invite', {
-    method: 'POST',
-    body: JSON.stringify(data),
-  }),
-
-  // GET /api/auth/invites
-  getInvites: () => apiClient('/auth/invites'),
-};
-
-```
-
-### holidayApi.ts
-```typescript
-import apiClient from './apiClient';
-
-export const holidayApi = {
-  getUpcomingHolidays: () => apiClient('/holidays/upcoming'),
-  createHoliday: (data: any) => apiClient('/holidays', {
-    method: 'POST',
-    body: JSON.stringify(data)
-  }),
-  uploadHolidays: (data: any) => apiClient('/holidays/upload', {
-    method: 'POST',
-    body: JSON.stringify(data)
-  })
-};
-
-```
-
-### leaveApi.ts
-```typescript
-import apiClient from './apiClient';
-
-export const leaveApi = {
-  applyForLeave: (data: any) => apiClient('/leaves', { 
-    method: 'POST',
-    body: JSON.stringify(data)
-  }),
-  getMyLeaves: () => apiClient('/leaves/my'),
-  getUpcomingLeaves: () => apiClient('/leaves/upcoming'),
-  getPendingLeaves: () => apiClient('/leaves/pending'),
-  reviewLeave: (id: string, data: any) => apiClient(`/leaves/${id}/review`, { 
-    method: 'PUT',
-    body: JSON.stringify(data)
-  }),
-};
-
-```
-
-### wishesApi.ts
-```typescript
-import apiClient from './apiClient';
-
-export const wishesApi = {
-  createWish: (data: any) => apiClient('/wishes', {
-    method: 'POST',
-    body: JSON.stringify(data)
-  }),
-  getPendingWishes: () => apiClient('/wishes/pending'),
-  getCelebrations: () => apiClient('/auth/celebrations'),
-};
-
-```
-
-## 6. Navigation and Screen Flow
-- **Auth Stack:** Login Screen -> Main App
-- **Main Stack (HomeScreen):** Contains Top Tabs (My Space, Team, Org), Secondary Tabs (Activities, Dashboard, Feeds, Profile), and Bottom Nav (Home, Directory, Payslip, Menu).
-- **Side Drawer:** Hamburger menu with options for My Regularizations, Team Approvals, Profile, Settings, Logout.
-
-## 7. Every File With Its Full Code
-### App.tsx
-```tsx
 import React, { useState, useEffect } from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { LoginScreen } from './src/screens/LoginScreen';
@@ -378,13 +87,16 @@ import { PolicyScreen } from './src/screens/PolicyScreen';
 import { MessageListScreen } from './src/screens/MessageListScreen';
 import { ChatScreen } from './src/screens/ChatScreen';
 import { VideoCallScreen } from './src/screens/VideoCallScreen';
+import { DailyCallReportScreen } from './src/screens/DailyCallReportScreen';
+import { CallHistoryScreen } from './src/screens/CallHistoryScreen';
 import { setupNotifications, scheduleDailyAlarms } from './src/utils/notifications';
 import * as Notifications from 'expo-notifications';
 import { Alert } from 'react-native';
 
 function App() {
-  const [currentScreen, setCurrentScreen] = useState<'LOGIN' | 'HOME' | 'APPLY_LEAVE' | 'SETTINGS' | 'POLICY' | 'MESSAGE_LIST' | 'CHAT' | 'VIDEO_CALL'>('LOGIN');
+  const [currentScreen, setCurrentScreen] = useState<'LOGIN' | 'HOME' | 'APPLY_LEAVE' | 'SETTINGS' | 'POLICY' | 'MESSAGE_LIST' | 'CHAT' | 'VIDEO_CALL' | 'DAILY_CALL_REPORT' | 'CALL_HISTORY'>('LOGIN');
   const [selectedLeave, setSelectedLeave] = useState<any>(null);
+  const [selectedReportId, setSelectedReportId] = useState<string | undefined>(undefined);
   const [selectedChatContact, setSelectedChatContact] = useState<any>(null);
   const [initialHomeNav, setInitialHomeNav] = useState('Activities');
   const [policyType, setPolicyType] = useState<'privacy' | 'terms' | 'preferences'>('privacy');
@@ -425,6 +137,7 @@ function App() {
             setCurrentScreen('APPLY_LEAVE');
           }}
           onMessagePress={() => setCurrentScreen('MESSAGE_LIST')}
+          onDailyCallReportPress={() => setCurrentScreen('CALL_HISTORY')}
         />
       )}
       {currentScreen === 'APPLY_LEAVE' && (
@@ -479,16 +192,176 @@ function App() {
           onEndCall={() => setCurrentScreen('CHAT')}
         />
       )}
+      {currentScreen === 'CALL_HISTORY' && (
+        <CallHistoryScreen 
+          onBack={() => setCurrentScreen('HOME')}
+          onAddCall={() => {
+            setSelectedReportId(undefined);
+            setCurrentScreen('DAILY_CALL_REPORT');
+          }}
+          onEditCall={(id) => {
+            setSelectedReportId(id);
+            setCurrentScreen('DAILY_CALL_REPORT');
+          }}
+        />
+      )}
+      {currentScreen === 'DAILY_CALL_REPORT' && (
+        <DailyCallReportScreen 
+          reportId={selectedReportId}
+          onBack={() => setCurrentScreen('CALL_HISTORY')}
+        />
+      )}
     </SafeAreaProvider>
   );
 }
 
 export default App;
 
-```
 
-### src\api\activityApi.ts
-```ts
+
+================================================
+--- File: D:\Enquiry_Application\babel.config.js ---
+================================================
+
+module.exports = function (api) {
+  api.cache(true);
+  return {
+    presets: ['babel-preset-expo'],
+  };
+};
+
+
+
+================================================
+--- File: D:\Enquiry_Application\eas.json ---
+================================================
+
+{
+  "cli": {
+    "version": ">= 20.2.0",
+    "appVersionSource": "remote"
+  },
+  "build": {
+    "development": {
+      "developmentClient": true,
+      "distribution": "internal"
+    },
+    "preview": {
+      "distribution": "internal",
+      "android": {
+        "buildType": "apk"
+      }
+    },
+    "production": {
+      "autoIncrement": true
+    }
+  },
+  "submit": {
+    "production": {}
+  }
+}
+
+
+
+================================================
+--- File: D:\Enquiry_Application\jest.config.js ---
+================================================
+
+module.exports = {
+  preset: 'react-native',
+};
+
+
+
+================================================
+--- File: D:\Enquiry_Application\metro.config.js ---
+================================================
+
+const { getDefaultConfig } = require('expo/metro-config');
+
+/**
+ * Metro configuration
+ * https://reactnative.dev/docs/metro
+ *
+ * @type {import('expo/metro-config').MetroConfig}
+ */
+const config = getDefaultConfig(__dirname);
+
+module.exports = config;
+
+
+
+================================================
+--- File: D:\Enquiry_Application\package.json ---
+================================================
+
+{
+  "name": "EnquiryApplication",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "start": "expo start",
+    "android": "expo run:android",
+    "ios": "expo run:ios"
+  },
+  "dependencies": {
+    "@react-native-async-storage/async-storage": "2.2.0",
+    "@react-native-community/datetimepicker": "8.4.4",
+    "@react-native/new-app-screen": "0.81.5",
+    "babel-preset-expo": "~54.0.10",
+    "expo": "^54.0.35",
+    "expo-device": "~8.0.10",
+    "expo-document-picker": "~14.0.8",
+    "expo-image-picker": "~17.0.11",
+    "expo-local-authentication": "~17.0.8",
+    "expo-location": "~19.0.8",
+    "expo-notifications": "~0.32.17",
+    "expo-updates": "~29.0.18",
+    "react": "19.1.0",
+    "react-native": "0.81.5",
+    "react-native-safe-area-context": "~5.6.0",
+    "react-native-svg": "15.12.1",
+    "socket.io-client": "^4.6.1"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.25.2",
+    "@babel/preset-env": "^7.25.3",
+    "@babel/runtime": "^7.25.0",
+    "@react-native-community/cli": "20.1.0",
+    "@react-native-community/cli-platform-android": "20.1.0",
+    "@react-native-community/cli-platform-ios": "20.1.0",
+    "@react-native/babel-preset": "0.81.5",
+    "@react-native/eslint-config": "0.81.5",
+    "@react-native/metro-config": "0.81.5",
+    "@react-native/typescript-config": "0.81.5",
+    "@types/jest": "^29.5.13",
+    "@types/react": "~19.1.10",
+    "@types/react-test-renderer": "~19.1.0",
+    "eslint": "^8.19.0",
+    "jest": "^29.6.3",
+    "prettier": "2.8.8",
+    "react-test-renderer": "19.1.0",
+    "typescript": "~5.9.2"
+  }
+}
+
+
+
+================================================
+--- File: D:\Enquiry_Application\tsconfig.json ---
+================================================
+
+{
+  "compilerOptions": {},
+  "extends": "expo/tsconfig.base"
+}
+
+
+
+================================================
+--- File: D:\Enquiry_Application\src\api\activityApi.ts ---
+================================================
+
 // src/api/activityApi.ts
 import apiClient from './apiClient';
 
@@ -509,71 +382,114 @@ export const activityApi = {
   }),
 };
 
-```
 
-### src\api\apiClient.ts
-```ts
+
+================================================
+--- File: D:\Enquiry_Application\src\api\apiClient.ts ---
+================================================
+
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-// You can swap this to the production URL later
+// Production URL
 // const BASE_URL = 'http://localhost:5000/api'; 
-// const BASE_URL = 'http://10.0.2.2:5000/api'; // Use this if you are testing on an Android Emulator
-//const BASE_URL = 'http://192.168.1.8:5000/api'; // Testing on physical phone
-const BASE_URL = 'https://atpl-enquiry-application.onrender.com/api';
+// const BASE_URL = 'http://10.0.2.2:5000/api'; // Android Emulator
+// const BASE_URL = 'http://192.168.1.8:5000/api'; // Physical phone (local)
+const BASE_URL = 'https://perfectflow360.atplgroup.org/api'; // Production server
+// const BASE_URL = 'https://atpl-enquiry-application.onrender.com/api'; // Old Render
 
 const apiClient = async (endpoint: string, options: RequestInit = {}) => {
   const token = await AsyncStorage.getItem('userToken');
-  
+
   const headers = new Headers(options.headers);
-  if (!headers.has('Content-Type')) {
+  const isFormData = options.body instanceof FormData;
+  if (!isFormData && !headers.has('Content-Type')) {
     headers.set('Content-Type', 'application/json');
   }
+  // Note: Do NOT set Content-Type for FormData — React Native sets it
+  // automatically with the correct multipart boundary
   if (token) {
     headers.set('Authorization', `Bearer ${token}`);
   }
 
-  const response = await fetch(`${BASE_URL}${endpoint}`, {
-    ...options,
-    headers,
-  });
+  try {
+    const response = await fetch(`${BASE_URL}${endpoint}`, {
+      ...options,
+      headers,
+    });
 
-  if (!response.ok) {
-    const errorData = await response.json().catch(() => ({}));
-    throw new Error(errorData.message || 'API request failed');
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      throw new Error(
+        errorData.message || `Server error: ${response.status} ${response.statusText}`
+      );
+    }
+
+    const responseData = await response.json();
+    console.log('API Response:', endpoint, responseData);
+    return responseData;
+  } catch (error: any) {
+    // Network error (no connection, server down, etc.)
+    if (error.message === 'Network request failed') {
+      throw new Error('Cannot connect to server. Please check your internet connection.');
+    }
+    throw error;
   }
-
-  const responseData = await response.json();
-  console.log('API Response data:', endpoint, responseData);
-  return responseData;
 };
 
 export default apiClient;
 
-```
 
-### src\api\attendanceApi.ts
-```ts
+
+================================================
+--- File: D:\Enquiry_Application\src\api\attendanceApi.ts ---
+================================================
+
 // src/api/attendanceApi.ts
 import apiClient from './apiClient';
 
+export interface LocationPayload {
+  lat: number;
+  lng: number;
+  address?: string;
+}
+
 export const attendanceApi = {
-  checkIn: () => apiClient('/attendance/check-in', { method: 'POST' }),
-  checkOut: () => apiClient('/attendance/check-out', { method: 'POST' }),
+  // POST /api/attendance/check-in
+  // Body: { location: { lat, lng, address } }
+  checkIn: (location?: LocationPayload) =>
+    apiClient('/attendance/check-in', {
+      method: 'POST',
+      body: location ? JSON.stringify({ location }) : undefined,
+    }),
+
+  // POST /api/attendance/check-out
+  // Body: { location: { lat, lng, address } }
+  checkOut: (location?: LocationPayload) =>
+    apiClient('/attendance/check-out', {
+      method: 'POST',
+      body: location ? JSON.stringify({ location }) : undefined,
+    }),
+
   getMyAttendance: () => apiClient(`/attendance/my?t=${Date.now()}`),
-  regularize: (id: string, data: any) => apiClient(`/attendance/regularize/${id}`, { 
+
+  regularize: (id: string, data: any) => apiClient(`/attendance/regularize/${id}`, {
     method: 'POST',
     body: JSON.stringify(data)
   }),
+
   getTeamStatus: () => apiClient('/attendance/team-status'),
   getOrgReport: () => apiClient('/attendance/organization-report'),
   getPendingRegularizations: () => apiClient('/attendance/pending-regularizations'),
   approveRegularization: (id: string) => apiClient(`/attendance/approve-regularization/${id}`, { method: 'PUT' }),
 };
 
-```
 
-### src\api\authApi.ts
-```ts
+
+
+================================================
+--- File: D:\Enquiry_Application\src\api\authApi.ts ---
+================================================
+
 // src/api/authApi.ts
 import apiClient from './apiClient';
 
@@ -638,10 +554,12 @@ export const authApi = {
   getInvites: () => apiClient('/auth/invites'),
 };
 
-```
 
-### src\api\holidayApi.ts
-```ts
+
+================================================
+--- File: D:\Enquiry_Application\src\api\holidayApi.ts ---
+================================================
+
 import apiClient from './apiClient';
 
 export const holidayApi = {
@@ -656,10 +574,12 @@ export const holidayApi = {
   })
 };
 
-```
 
-### src\api\leaveApi.ts
-```ts
+
+================================================
+--- File: D:\Enquiry_Application\src\api\leaveApi.ts ---
+================================================
+
 import apiClient from './apiClient';
 
 export const leaveApi = {
@@ -676,10 +596,12 @@ export const leaveApi = {
   }),
 };
 
-```
 
-### src\api\wishesApi.ts
-```ts
+
+================================================
+--- File: D:\Enquiry_Application\src\api\wishesApi.ts ---
+================================================
+
 import apiClient from './apiClient';
 
 export const wishesApi = {
@@ -691,10 +613,382 @@ export const wishesApi = {
   getCelebrations: () => apiClient('/auth/celebrations'),
 };
 
-```
 
-### src\screens\ApplyLeaveScreen.tsx
-```tsx
+
+================================================
+--- File: D:\Enquiry_Application\src\components\SplashScreen.tsx ---
+================================================
+
+import React, { useEffect, useRef, useState } from 'react';
+import { View, Text, StyleSheet, Animated, Easing, Platform, Dimensions } from 'react-native';
+import Svg, { Circle, Path, Ellipse, Rect } from 'react-native-svg';
+import * as Updates from 'expo-updates';
+
+const COLOR_NAVY = '#1F2937';
+const COLOR_BLUE = '#378ADD';
+const COLOR_RED = '#D85A30';
+const COLOR_WHITE = '#FFFFFF';
+const COLOR_GRAY = '#E5E7EB';
+
+export default function SplashScreen() {
+  const [dots, setDots] = useState('');
+  const [isCheckingUpdate, setIsCheckingUpdate] = useState(true);
+  const [isDownloading, setIsDownloading] = useState(false);
+  const [updateMessage, setUpdateMessage] = useState('Checking for updates');
+
+  // Animation Refs
+  const ringRotation = useRef(new Animated.Value(0)).current;
+  const waveAnim = useRef(new Animated.Value(0)).current;
+  const blinkAnim = useRef(new Animated.Value(1)).current;
+  const progressAnim = useRef(new Animated.Value(0)).current;
+
+  useEffect(() => {
+    // 1. Ring Rotation (continuous, ~3s)
+    Animated.loop(
+      Animated.timing(ringRotation, {
+        toValue: 1,
+        duration: 3000,
+        easing: Easing.linear,
+        useNativeDriver: true,
+      })
+    ).start();
+
+    // 2. Wave Animation (oscillating, ~1.6s loop)
+    Animated.loop(
+      Animated.sequence([
+        Animated.timing(waveAnim, {
+          toValue: 1,
+          duration: 400,
+          easing: Easing.inOut(Easing.ease),
+          useNativeDriver: true,
+        }),
+        Animated.timing(waveAnim, {
+          toValue: -1,
+          duration: 800,
+          easing: Easing.inOut(Easing.ease),
+          useNativeDriver: true,
+        }),
+        Animated.timing(waveAnim, {
+          toValue: 0,
+          duration: 400,
+          easing: Easing.inOut(Easing.ease),
+          useNativeDriver: true,
+        }),
+      ])
+    ).start();
+
+    // 3. Blink Animation (~3s loop)
+    Animated.loop(
+      Animated.sequence([
+        Animated.delay(2800),
+        Animated.timing(blinkAnim, {
+          toValue: 0.1,
+          duration: 100,
+          useNativeDriver: true,
+        }),
+        Animated.timing(blinkAnim, {
+          toValue: 1,
+          duration: 100,
+          useNativeDriver: true,
+        }),
+      ])
+    ).start();
+
+    // 4. Progress bar indeterminate
+    Animated.loop(
+      Animated.timing(progressAnim, {
+        toValue: 1,
+        duration: 1500,
+        easing: Easing.inOut(Easing.ease),
+        useNativeDriver: false,
+      })
+    ).start();
+
+    // Dots interval (cycle . .. ...)
+    const dotInterval = setInterval(() => {
+      setDots((prev) => (prev.length >= 3 ? '' : prev + '.'));
+    }, 500);
+
+    return () => clearInterval(dotInterval);
+  }, [ringRotation, waveAnim, blinkAnim, progressAnim]);
+
+  useEffect(() => {
+    // Expo Updates Logic
+    const handleUpdates = async () => {
+      try {
+        if (__DEV__) {
+          // Skip update logic in local development
+          setIsCheckingUpdate(false);
+          return;
+        }
+
+        const update = await Updates.checkForUpdateAsync();
+        if (update.isAvailable) {
+          setIsCheckingUpdate(false);
+          setIsDownloading(true);
+          setUpdateMessage('New update available, downloading');
+          
+          await Updates.fetchUpdateAsync();
+          
+          setUpdateMessage('Restart to update');
+          setIsDownloading(false);
+        } else {
+          setIsCheckingUpdate(false);
+        }
+      } catch (error) {
+        setIsCheckingUpdate(false);
+        console.warn('Error checking for updates', error);
+      }
+    };
+
+    handleUpdates();
+  }, []);
+
+  const spinOuter = ringRotation.interpolate({
+    inputRange: [0, 1],
+    outputRange: ['0deg', '360deg'],
+  });
+
+  const spinInner = ringRotation.interpolate({
+    inputRange: [0, 1],
+    outputRange: ['360deg', '0deg'],
+  });
+
+  const waveRotate = waveAnim.interpolate({
+    inputRange: [-1, 1],
+    outputRange: ['-25deg', '25deg'],
+  });
+
+  const progressWidth = progressAnim.interpolate({
+    inputRange: [0, 1],
+    outputRange: ['0%', '100%'],
+  });
+
+  // Calculate some dimensions to properly center
+  const ringSize = 220;
+  const innerRingSize = 190;
+
+  return (
+    <View style={styles.container}>
+      {/* 2. Loading from Server Banner */}
+      <View style={styles.topBanner}>
+        {isCheckingUpdate ? (
+          <Text style={styles.topBannerText}>Loading from server{dots}</Text>
+        ) : (
+          <Text style={styles.topBannerText}> </Text>
+        )}
+      </View>
+
+      {/* 3. Center Mascot and Rings */}
+      <View style={styles.centerContent}>
+        <View style={styles.mascotContainer}>
+          
+          {/* Outer Red Ring */}
+          <Animated.View style={[styles.ringContainer, { width: ringSize, height: ringSize, transform: [{ rotate: spinOuter }] }]}>
+            <Svg width="100%" height="100%" viewBox={`0 0 ${ringSize} ${ringSize}`}>
+              <Path
+                d={`M 15 ${ringSize / 2} A ${ringSize / 2 - 15} ${ringSize / 2 - 15} 0 0 1 ${ringSize - 15} ${ringSize / 2}`}
+                fill="none"
+                stroke={COLOR_RED}
+                strokeWidth={5}
+                strokeLinecap="round"
+              />
+            </Svg>
+          </Animated.View>
+
+          {/* Inner Blue Ring */}
+          <Animated.View style={[styles.ringContainer, { width: innerRingSize, height: innerRingSize, transform: [{ rotate: spinInner }] }]}>
+            <Svg width="100%" height="100%" viewBox={`0 0 ${innerRingSize} ${innerRingSize}`}>
+              <Path
+                d={`M 15 ${innerRingSize / 2} A ${innerRingSize / 2 - 15} ${innerRingSize / 2 - 15} 0 0 0 ${innerRingSize - 15} ${innerRingSize / 2}`}
+                fill="none"
+                stroke={COLOR_BLUE}
+                strokeWidth={5}
+                strokeLinecap="round"
+              />
+            </Svg>
+          </Animated.View>
+
+          {/* Robot Mascot */}
+          <View style={styles.robotWrapper}>
+            <Svg width={140} height={140} viewBox="0 0 140 140">
+              {/* Drop Shadow */}
+              <Ellipse cx={70} cy={130} rx={45} ry={5} fill="rgba(0,0,0,0.08)" />
+              
+              {/* Body */}
+              <Rect x={45} y={60} width={50} height={60} rx={25} fill={COLOR_WHITE} stroke={COLOR_GRAY} strokeWidth={2} />
+              
+              {/* Clock/Gauge on chest */}
+              <Circle cx={70} cy={90} r={12} fill="#F3F4F6" stroke={COLOR_NAVY} strokeWidth={2} />
+              <Path d="M 70 90 L 70 82 M 70 90 L 76 94" stroke={COLOR_RED} strokeWidth={2} strokeLinecap="round" />
+              
+              {/* Head */}
+              <Rect x={35} y={20} width={70} height={45} rx={22.5} fill={COLOR_WHITE} stroke={COLOR_GRAY} strokeWidth={2} />
+              
+              {/* Visor */}
+              <Rect x={45} y={30} width={50} height={20} rx={10} fill={COLOR_NAVY} />
+              
+              {/* Left Arm (Static) */}
+              <Path d="M 45 75 Q 30 75 35 100" fill="none" stroke={COLOR_WHITE} strokeWidth={12} strokeLinecap="round" />
+              {/* Left Arm Border (to give some outline) */}
+              <Path d="M 45 75 Q 30 75 35 100" fill="none" stroke={COLOR_GRAY} strokeWidth={2} strokeLinecap="round" x="-2" />
+            </Svg>
+            
+            {/* Eyes (Animated Blink) */}
+            <Animated.View style={[styles.eyesContainer, { transform: [{ scaleY: blinkAnim }] }]}>
+              <Svg width={50} height={20} viewBox="0 0 50 20">
+                <Circle cx={12} cy={10} r={4} fill={COLOR_BLUE} />
+                <Circle cx={38} cy={10} r={4} fill={COLOR_BLUE} />
+              </Svg>
+            </Animated.View>
+            
+            {/* Right Arm (Waving) */}
+            <Animated.View style={[
+              styles.wavingArmContainer,
+              { transform: [{ rotate: waveRotate }] }
+            ]}>
+              <Svg width={40} height={50} viewBox="0 0 40 50">
+                {/* Arm path */}
+                <Path d="M 10 10 Q 30 -5 30 25" fill="none" stroke={COLOR_WHITE} strokeWidth={12} strokeLinecap="round" />
+                {/* Outline */}
+                <Path d="M 10 10 Q 30 -5 30 25" fill="none" stroke={COLOR_GRAY} strokeWidth={2} strokeLinecap="round" x="2" />
+              </Svg>
+            </Animated.View>
+          </View>
+        </View>
+
+        {/* 4. App Name */}
+        <Text style={styles.appName}>Perfect Flow 360</Text>
+      </View>
+
+      {/* 5. Update Banner */}
+      <View style={styles.bottomBannerContainer}>
+        {(isDownloading || updateMessage === 'Restart to update') && (
+          <View style={styles.bottomBanner}>
+            <Text style={styles.bannerText}>
+              {updateMessage}{isDownloading ? dots : ''}
+            </Text>
+            {isDownloading && (
+              <View style={styles.progressBarContainer}>
+                <Animated.View style={[styles.progressBarFill, { width: progressWidth }]} />
+              </View>
+            )}
+          </View>
+        )}
+      </View>
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#FAFAFA', // Subtle off-white background
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingTop: Platform.OS === 'ios' ? 50 : 20, // Avoid system status bar
+    paddingBottom: 30,
+  },
+  topBanner: {
+    height: 40,
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: '100%',
+  },
+  topBannerText: {
+    color: '#6B7280', // Medium gray
+    fontSize: 14,
+    fontWeight: '500',
+  },
+  centerContent: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    flex: 1,
+  },
+  mascotContainer: {
+    width: 250,
+    height: 250,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  ringContainer: {
+    position: 'absolute',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  robotWrapper: {
+    width: 140,
+    height: 140,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  eyesContainer: {
+    position: 'absolute',
+    top: 30,
+    left: 45,
+    width: 50,
+    height: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  wavingArmContainer: {
+    position: 'absolute',
+    top: 65,
+    right: 20,
+    width: 40,
+    height: 50,
+    transformOrigin: '10px 10px', // Rotate from shoulder (top-left of the svg box)
+  },
+  appName: {
+    marginTop: 40,
+    fontSize: 26,
+    fontWeight: '800',
+    color: COLOR_NAVY,
+    letterSpacing: 0.5,
+  },
+  bottomBannerContainer: {
+    height: 60,
+    width: '100%',
+    paddingHorizontal: 20,
+    justifyContent: 'flex-end',
+  },
+  bottomBanner: {
+    width: '100%',
+    backgroundColor: COLOR_WHITE,
+    borderRadius: 12,
+    padding: 15,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
+  },
+  bannerText: {
+    color: COLOR_NAVY,
+    fontSize: 14,
+    fontWeight: '600',
+    marginBottom: 8,
+    textAlign: 'center',
+  },
+  progressBarContainer: {
+    height: 4,
+    backgroundColor: '#E5E7EB',
+    borderRadius: 2,
+    overflow: 'hidden',
+    width: '100%',
+  },
+  progressBarFill: {
+    height: '100%',
+    backgroundColor: COLOR_BLUE,
+  },
+});
+
+
+
+================================================
+--- File: D:\Enquiry_Application\src\screens\ApplyLeaveScreen.tsx ---
+================================================
+
 import React, { useState } from 'react';
 import {
   ScrollView,
@@ -806,10 +1100,8 @@ export const ApplyLeaveScreen: React.FC<ApplyLeaveScreenProps> = ({
         status: 'pending'
       };
 
-      // Hits POST /api/leaves
       const res = await leaveApi.applyForLeave(payload);
-
-      Alert.alert("Debug API Response", JSON.stringify(res, null, 2));
+      Alert.alert("Success", "Leave applied successfully!");
       onSubmit(); // Call the parent callback to navigate back
     } catch (error: any) {
       console.warn("Failed to apply for leave", error);
@@ -1259,10 +1551,181 @@ const styles = StyleSheet.create({
   },
 });
 
-```
 
-### src\screens\ChatScreen.tsx
-```tsx
+
+================================================
+--- File: D:\Enquiry_Application\src\screens\CallHistoryScreen.tsx ---
+================================================
+
+import React, { useState, useEffect } from 'react';
+import {
+  View, Text, TouchableOpacity,
+  ActivityIndicator, StyleSheet, FlatList, Alert
+} from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import Svg, { Polyline, Path } from 'react-native-svg';
+import apiClient from '../api/apiClient';
+
+const C = {
+  primary: '#E85874',
+  blue: '#39A3DD',
+  bg: '#F9FAFB',
+  white: '#FFFFFF',
+  text: '#1E293B',
+  textSub: '#64748B',
+  border: '#E2E8F0',
+  green: '#10B981',
+};
+
+interface Props {
+  onBack: () => void;
+  onAddCall: () => void;
+  onEditCall: (id: string) => void;
+}
+
+export const CallHistoryScreen: React.FC<Props> = ({ onBack, onAddCall, onEditCall }) => {
+  const [reports, setReports] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    loadReports();
+  }, []);
+
+  const loadReports = async () => {
+    setLoading(true);
+    try {
+      const res = await apiClient('/daily-call-reports', { method: 'GET' });
+      const data = res.data?.data || res.data || [];
+      // Sort by date descending
+      data.sort((a: any, b: any) => new Date(b.date || b.createdAt).getTime() - new Date(a.date || a.createdAt).getTime());
+      setReports(data);
+    } catch (err) {
+      console.error(err);
+      Alert.alert('Error', 'Failed to load call history');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const renderItem = ({ item }: { item: any }) => {
+    const d = item.date ? new Date(item.date).toLocaleDateString('en-IN') : 'N/A';
+    return (
+      <TouchableOpacity style={s.card} onPress={() => onEditCall(item._id || item.id)}>
+        <View style={s.cardHeader}>
+          <Text style={s.customerName}>{item.customer || 'Unknown Customer'}</Text>
+          <View style={[s.badge, item.closedPending === 'Closed' ? s.badgeClosed : s.badgePending]}>
+            <Text style={[s.badgeText, item.closedPending === 'Closed' ? s.badgeTextClosed : s.badgeTextPending]}>
+              {item.closedPending || 'Pending'}
+            </Text>
+          </View>
+        </View>
+        <View style={s.cardBody}>
+          <View style={s.infoRow}>
+            <Text style={s.infoLabel}>Date:</Text>
+            <Text style={s.infoValue}>{d}</Text>
+          </View>
+          <View style={s.infoRow}>
+            <Text style={s.infoLabel}>Nature:</Text>
+            <Text style={s.infoValue}>{item.workNature || 'N/A'}</Text>
+          </View>
+          <View style={s.infoRow}>
+            <Text style={s.infoLabel}>Person:</Text>
+            <Text style={s.infoValue}>{item.personAligned || 'N/A'}</Text>
+          </View>
+        </View>
+      </TouchableOpacity>
+    );
+  };
+
+  return (
+    <SafeAreaView style={s.safeArea}>
+      <View style={s.header}>
+        <View style={s.headerLeft}>
+          <TouchableOpacity onPress={onBack} style={s.backBtn}>
+            <Svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+              stroke={C.text} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <Polyline points="15 18 9 12 15 6" />
+            </Svg>
+          </TouchableOpacity>
+          <View>
+            <Text style={s.headerTitle}>Call History</Text>
+            <Text style={s.headerSub}>Manage your daily calls</Text>
+          </View>
+        </View>
+        <TouchableOpacity style={s.addBtn} onPress={onAddCall}>
+          <Svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke={C.white} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <Path d="M12 5v14M5 12h14" />
+          </Svg>
+          <Text style={s.addBtnText}>Add Call</Text>
+        </TouchableOpacity>
+      </View>
+
+      <View style={s.content}>
+        {loading ? (
+          <ActivityIndicator size="large" color={C.blue} style={{ marginTop: 40 }} />
+        ) : reports.length === 0 ? (
+          <View style={s.emptyState}>
+            <Text style={s.emptyStateText}>No call reports found</Text>
+          </View>
+        ) : (
+          <FlatList
+            data={reports}
+            keyExtractor={(item, index) => item._id || item.id || index.toString()}
+            renderItem={renderItem}
+            contentContainerStyle={s.listContent}
+            showsVerticalScrollIndicator={false}
+          />
+        )}
+      </View>
+    </SafeAreaView>
+  );
+};
+
+const s = StyleSheet.create({
+  safeArea: { flex: 1, backgroundColor: C.bg },
+  header: {
+    flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between',
+    paddingHorizontal: 16, paddingVertical: 12,
+    backgroundColor: C.white, borderBottomWidth: 1, borderBottomColor: C.border,
+  },
+  headerLeft: { flexDirection: 'row', alignItems: 'center' },
+  backBtn: { padding: 8, marginLeft: -8, marginRight: 8 },
+  headerTitle: { fontSize: 17, fontWeight: '700', color: C.text },
+  headerSub: { fontSize: 12, color: C.textSub, marginTop: 2 },
+  addBtn: {
+    flexDirection: 'row', alignItems: 'center', backgroundColor: C.blue,
+    paddingHorizontal: 12, paddingVertical: 8, borderRadius: 8, gap: 6
+  },
+  addBtnText: { color: C.white, fontSize: 14, fontWeight: '600' },
+  content: { flex: 1 },
+  listContent: { padding: 16, gap: 12 },
+  emptyState: { flex: 1, justifyContent: 'center', alignItems: 'center' },
+  emptyStateText: { fontSize: 15, color: C.textSub },
+  card: {
+    backgroundColor: C.white, borderRadius: 12, padding: 16,
+    borderWidth: 1, borderColor: C.border, elevation: 1,
+    shadowColor: '#000', shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.05, shadowRadius: 2,
+  },
+  cardHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 12 },
+  customerName: { fontSize: 16, fontWeight: '700', color: C.text, flex: 1, marginRight: 8 },
+  badge: { paddingHorizontal: 8, paddingVertical: 4, borderRadius: 12 },
+  badgePending: { backgroundColor: '#FEF3C7' },
+  badgeClosed: { backgroundColor: '#D1FAE5' },
+  badgeText: { fontSize: 11, fontWeight: '700' },
+  badgeTextPending: { color: '#D97706' },
+  badgeTextClosed: { color: '#059669' },
+  cardBody: { gap: 6 },
+  infoRow: { flexDirection: 'row' },
+  infoLabel: { width: 60, fontSize: 13, color: C.textSub },
+  infoValue: { flex: 1, fontSize: 13, color: C.text, fontWeight: '500' },
+});
+
+
+
+================================================
+--- File: D:\Enquiry_Application\src\screens\ChatScreen.tsx ---
+================================================
+
 import React, { useState } from 'react';
 import {
   View,
@@ -1706,10 +2169,776 @@ const styles = StyleSheet.create({
   },
 });
 
-```
 
-### src\screens\HomeScreen.tsx
-```tsx
+
+================================================
+--- File: D:\Enquiry_Application\src\screens\DailyCallReportScreen.tsx ---
+================================================
+
+import React, { useState, useEffect, useRef } from 'react';
+import {
+  ScrollView, View, Text, TextInput,
+  TouchableOpacity, ActivityIndicator, StyleSheet,
+  Modal, Alert, Platform,
+} from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import Svg, { Polyline, Path, Circle, Rect } from 'react-native-svg';
+import DateTimePicker from '@react-native-community/datetimepicker';
+import apiClient from '../api/apiClient';
+
+// ─── Colours ───────────────────────────────────────────────────────────────
+const C = {
+  primary: '#E85874',
+  blue: '#39A3DD',
+  bg: '#F9FAFB',
+  white: '#FFFFFF',
+  text: '#1E293B',
+  textSub: '#64748B',
+  border: '#E2E8F0',
+  red: '#EF4444',
+  green: '#10B981',
+  slate50: '#F8FAFC',
+};
+
+// ─── Work nature groups ────────────────────────────────────────────────────
+const PICKUP_NATURES = ['Material collection', 'Self pickup', 'Rental pickup'];
+const DELIVERY_NATURES = ['Material Delivery'];
+const HARDWARE_NATURES = ['Service', 'Installation', 'Hardware Enquiry'];
+const SOFTWARE_NATURES = ['Software Enquiry'];
+const RESOLUTION_NATURES = ['Service', 'Installation', 'Cold call visit', 'Meeting ', 'Demo', 'Others', 'Hardware Enquiry'];
+
+// ─── Tiny helpers ──────────────────────────────────────────────────────────
+const today = () => new Date().toISOString().split('T')[0];
+
+const Label = ({ text, required }: { text: string; required?: boolean }) => (
+  <Text style={s.label}>
+    {text}{required ? <Text style={{ color: C.red }}> *</Text> : null}
+  </Text>
+);
+
+const Field = ({ children }: { children: React.ReactNode }) => (
+  <View style={s.fieldWrap}>{children}</View>
+);
+
+// ─── SelectField (modal picker) ────────────────────────────────────────────
+interface Opt { label: string; value: string }
+const SelectField = ({ label, value, options, onSelect, required }: {
+  label: string; value: string; options: Opt[];
+  onSelect: (v: string) => void; required?: boolean;
+}) => {
+  const [vis, setVis] = useState(false);
+  const display = options.find(o => o.value === value)?.label || value;
+  return (
+    <Field>
+      <Label text={label} required={required} />
+      <TouchableOpacity style={s.input} onPress={() => setVis(true)}>
+        <Text style={{ color: value ? C.text : C.textSub, fontSize: 14 }}>{display || `Select ${label}`}</Text>
+      </TouchableOpacity>
+      <Modal visible={vis} transparent animationType="slide">
+        <TouchableOpacity style={s.overlay} onPress={() => setVis(false)}>
+          <View style={s.sheet}>
+            <Text style={s.sheetTitle}>{label}</Text>
+            <ScrollView>
+              {options.map(opt => (
+                <TouchableOpacity key={opt.value} style={s.sheetRow}
+                  onPress={() => { onSelect(opt.value); setVis(false); }}>
+                  <Text style={[s.sheetRowText, opt.value === value && { color: C.primary, fontWeight: '700' }]}>
+                    {opt.label}
+                  </Text>
+                </TouchableOpacity>
+              ))}
+            </ScrollView>
+          </View>
+        </TouchableOpacity>
+      </Modal>
+    </Field>
+  );
+};
+
+// ─── TextRow ───────────────────────────────────────────────────────────────
+const TextRow = ({ label, value, onChange, placeholder, required, keyboardType, multiline }: any) => (
+  <Field>
+    <Label text={label} required={required} />
+    <TextInput
+      style={[s.input, multiline && { height: 72, textAlignVertical: 'top', paddingTop: 10 }]}
+      value={value} onChangeText={onChange}
+      placeholder={placeholder || ''} placeholderTextColor={C.textSub}
+      keyboardType={keyboardType || 'default'} multiline={multiline}
+    />
+  </Field>
+);
+
+// ─── TimePickerField ───────────────────────────────────────────────────────
+const TimePickerField = ({ label, value, onChange, required }: {
+  label: string; value: string;
+  onChange: (val: string) => void; required?: boolean;
+}) => {
+  const [show, setShow] = useState(false);
+  const [pickerDate, setPickerDate] = useState<Date>(() => {
+    if (value) {
+      const [h, m] = value.split(':').map(Number);
+      const d = new Date();
+      d.setHours(h || 0, m || 0, 0, 0);
+      return d;
+    }
+    return new Date();
+  });
+
+  const handleChange = (_: any, selected?: Date) => {
+    if (Platform.OS === 'android') setShow(false);
+    if (selected) {
+      setPickerDate(selected);
+      const h = selected.getHours().toString().padStart(2, '0');
+      const m = selected.getMinutes().toString().padStart(2, '0');
+      onChange(`${h}:${m}`);
+    }
+  };
+
+  // Format for display: 09:30 AM
+  const displayTime = () => {
+    if (!value) return 'Tap to set time';
+    const [h, m] = value.split(':').map(Number);
+    const ampm = h >= 12 ? 'PM' : 'AM';
+    const h12 = h % 12 || 12;
+    return `${h12.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')} ${ampm}`;
+  };
+
+  return (
+    <Field>
+      <Label text={label} required={required} />
+      <TouchableOpacity
+        style={[s.input, { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }]}
+        onPress={() => setShow(true)}
+        activeOpacity={0.7}
+      >
+        <Text style={{ fontSize: 14, color: value ? C.text : C.textSub, flex: 1 }}>
+          {displayTime()}
+        </Text>
+        <Svg width="18" height="18" viewBox="0 0 24 24" fill="none"
+          stroke={value ? C.blue : C.textSub} strokeWidth="2"
+          strokeLinecap="round" strokeLinejoin="round">
+          <Circle cx="12" cy="12" r="10" />
+          <Path d="M12 6v6l4 2" />
+        </Svg>
+      </TouchableOpacity>
+
+      {show && (
+        <DateTimePicker
+          value={pickerDate}
+          mode="time"
+          is24Hour={false}
+          display={Platform.OS === 'ios' ? 'spinner' : 'default'}
+          onChange={handleChange}
+        />
+      )}
+
+      {/* iOS needs a Done button to dismiss */}
+      {show && Platform.OS === 'ios' && (
+        <Modal transparent animationType="slide" visible={show}>
+          <View style={tpStyles.iosOverlay}>
+            <View style={tpStyles.iosSheet}>
+              <View style={tpStyles.iosHeader}>
+                <TouchableOpacity onPress={() => setShow(false)}>
+                  <Text style={tpStyles.cancelText}>Cancel</Text>
+                </TouchableOpacity>
+                <Text style={tpStyles.iosTitle}>{label}</Text>
+                <TouchableOpacity onPress={() => setShow(false)}>
+                  <Text style={tpStyles.doneText}>Done</Text>
+                </TouchableOpacity>
+              </View>
+              <DateTimePicker
+                value={pickerDate}
+                mode="time"
+                is24Hour={false}
+                display="spinner"
+                onChange={handleChange}
+                style={{ height: 200 }}
+              />
+            </View>
+          </View>
+        </Modal>
+      )}
+    </Field>
+  );
+};
+
+const tpStyles = StyleSheet.create({
+  iosOverlay: {
+    flex: 1, backgroundColor: 'rgba(0,0,0,0.4)',
+    justifyContent: 'flex-end',
+  },
+  iosSheet: {
+    backgroundColor: '#FFF', borderTopLeftRadius: 20,
+    borderTopRightRadius: 20, paddingBottom: 32,
+  },
+  iosHeader: {
+    flexDirection: 'row', justifyContent: 'space-between',
+    alignItems: 'center', paddingHorizontal: 20, paddingVertical: 14,
+    borderBottomWidth: 1, borderBottomColor: '#E2E8F0',
+  },
+  iosTitle: { fontSize: 16, fontWeight: '700', color: '#1E293B' },
+  doneText: { fontSize: 15, fontWeight: '700', color: '#39A3DD' },
+  cancelText: { fontSize: 15, color: '#64748B' },
+});
+
+// ─── DatePickerField ────────────────────────────────────────────────────
+const DatePickerField = ({ label, value, onChange, required }: {
+  label: string; value: string;
+  onChange: (val: string) => void; required?: boolean;
+}) => {
+  const [show, setShow] = useState(false);
+  const toDate = (s: string) => {
+    const d = s ? new Date(s) : new Date();
+    return isNaN(d.getTime()) ? new Date() : d;
+  };
+  const [pickerDate, setPickerDate] = useState<Date>(() => toDate(value));
+
+  const handleChange = (_: any, selected?: Date) => {
+    if (Platform.OS === 'android') setShow(false);
+    if (selected) {
+      setPickerDate(selected);
+      const y = selected.getFullYear();
+      const m = (selected.getMonth() + 1).toString().padStart(2, '0');
+      const d = selected.getDate().toString().padStart(2, '0');
+      onChange(`${y}-${m}-${d}`);
+    }
+  };
+
+  const displayDate = () => {
+    if (!value) return 'Tap to pick date';
+    const d = new Date(value);
+    if (isNaN(d.getTime())) return value;
+    return d.toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' });
+  };
+
+  return (
+    <Field>
+      <Label text={label} required={required} />
+      <TouchableOpacity
+        style={[s.input, { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }]}
+        onPress={() => setShow(true)}
+        activeOpacity={0.7}
+      >
+        <Text style={{ fontSize: 14, color: value ? C.text : C.textSub, flex: 1 }}>
+          {displayDate()}
+        </Text>
+        <Svg width="18" height="18" viewBox="0 0 24 24" fill="none"
+          stroke={value ? C.blue : C.textSub} strokeWidth="2"
+          strokeLinecap="round" strokeLinejoin="round">
+          <Rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+          <Path d="M16 2v4M8 2v4M3 10h18" />
+        </Svg>
+      </TouchableOpacity>
+
+      {show && Platform.OS === 'android' && (
+        <DateTimePicker
+          value={pickerDate}
+          mode="date"
+          display="calendar"
+          onChange={handleChange}
+        />
+      )}
+      {show && Platform.OS === 'ios' && (
+        <Modal transparent animationType="slide" visible={show}>
+          <View style={tpStyles.iosOverlay}>
+            <View style={tpStyles.iosSheet}>
+              <View style={tpStyles.iosHeader}>
+                <TouchableOpacity onPress={() => setShow(false)}>
+                  <Text style={tpStyles.cancelText}>Cancel</Text>
+                </TouchableOpacity>
+                <Text style={tpStyles.iosTitle}>{label}</Text>
+                <TouchableOpacity onPress={() => setShow(false)}>
+                  <Text style={tpStyles.doneText}>Done</Text>
+                </TouchableOpacity>
+              </View>
+              <DateTimePicker
+                value={pickerDate}
+                mode="date"
+                display="spinner"
+                onChange={handleChange}
+                style={{ height: 200 }}
+              />
+            </View>
+          </View>
+        </Modal>
+      )}
+    </Field>
+  );
+};
+
+const Card = ({ title, children }: { title: string; children: React.ReactNode }) => (
+  <View style={s.card}>
+    <Text style={s.sectionTitle}>{title}</Text>
+    {children}
+  </View>
+);
+
+// ─── Main Screen ──────────────────────────────────────────────────────────
+interface Props { onBack: () => void; reportId?: string }
+
+export const DailyCallReportScreen: React.FC<Props> = ({ onBack, reportId }) => {
+  const isEditing = Boolean(reportId);
+  const [loading, setLoading] = useState(isEditing);
+  const [submitting, setSubmitting] = useState(false);
+  const [users, setUsers] = useState<any[]>([]);
+
+  // customer search
+  const [custInput, setCustInput] = useState('');
+  const [custResults, setCustResults] = useState<any[]>([]);
+  const [searchingCust, setSearchingCust] = useState(false);
+  const searchTimer = useRef<any>(null);
+
+  const [form, setForm] = useState({
+    date: today(), workNature: 'Service', directOnline: 'Direct', customerType: 'New',
+    customer: '', customerEmail: '', customerMobile: '', customerDesignation: '',
+    product: '', serialNumber: '', brand: '', specification: '',
+    inTime: '', outTime: '', problemStatement: '', status: '', closedPending: 'Pending',
+    docNumber: '', docDate: '', applicationName: '',
+    vehicleNumber: '', location: '', km: '', amount: '',
+    personAligned: '', remarks: '', reportPath: '', oem: '',
+    followUpDate: '', reminder: '', otherWorkNature: '',
+  });
+
+  const set = (field: string, value: string) =>
+    setForm(prev => ({ ...prev, [field]: value }));
+
+  const wn = form.workNature;
+  const isPickup = PICKUP_NATURES.includes(wn);
+  const isDelivery = DELIVERY_NATURES.includes(wn);
+  const isHardware = HARDWARE_NATURES.includes(wn);
+  const isSoftware = SOFTWARE_NATURES.includes(wn);
+  const showRes = RESOLUTION_NATURES.includes(wn);
+
+  useEffect(() => {
+    loadUsers();
+    if (isEditing) loadReport();
+  }, [reportId]);
+
+  const loadUsers = async () => {
+    try {
+      const res = await apiClient('/auth/users', { method: 'GET' });
+      setUsers(res.data?.data || res.data || []);
+    } catch { /* silent */ }
+  };
+
+  const loadReport = async () => {
+    try {
+      const res = await apiClient('/daily-call-reports', { method: 'GET' });
+      const report = (res.data?.data || res.data || []).find((r: any) => r._id === reportId);
+      if (report) {
+        setForm({
+          date: report.date?.split('T')[0] || today(),
+          workNature: report.workNature || 'Service',
+          directOnline: report.directOnline || 'Direct',
+          customerType: report.customerType || 'New',
+          customer: report.customer || '',
+          customerEmail: report.customerEmail || '',
+          customerMobile: report.customerMobile || '',
+          customerDesignation: report.customerDesignation || '',
+          product: report.product || '', serialNumber: report.serialNumber || '',
+          brand: report.brand || '', specification: report.specification || '',
+          inTime: report.inTime || '', outTime: report.outTime || '',
+          problemStatement: report.problemStatement || '', status: report.status || '',
+          closedPending: report.closedPending || 'Pending',
+          docNumber: report.docNumber || '', docDate: report.docDate?.split('T')[0] || '',
+          applicationName: report.applicationName || '',
+          vehicleNumber: report.vehicleNumber || '', location: report.location || '',
+          km: report.km || '', amount: report.amount || '',
+          personAligned: report.personAligned || '', remarks: report.remarks || '',
+          reportPath: report.reportPath || '', oem: report.oem || '',
+          followUpDate: report.followUpDate?.split('T')[0] || '',
+          reminder: report.reminder || '', otherWorkNature: report.otherWorkNature || '',
+        });
+        if (report.customerType === 'Existing') setCustInput(report.customerEmail || '');
+      } else {
+        Alert.alert('Error', 'Report not found');
+        onBack();
+      }
+    } catch (err: any) {
+      Alert.alert('Error', 'Failed to load report');
+    }
+    setLoading(false);
+  };
+
+  // customer search debounce
+  const handleCustSearch = (val: string) => {
+    setCustInput(val);
+    set('customerEmail', val);
+    if (searchTimer.current) clearTimeout(searchTimer.current);
+    if (val.length < 2) { setCustResults([]); return; }
+    searchTimer.current = setTimeout(async () => {
+      setSearchingCust(true);
+      try {
+        const res = await apiClient(`/customers?search=${encodeURIComponent(val)}&limit=8`, { method: 'GET' });
+        setCustResults(res.data?.data || res.data || []);
+      } catch { setCustResults([]); }
+      setSearchingCust(false);
+    }, 400);
+  };
+
+  const selectCustomer = (c: any) => {
+    setForm(prev => ({
+      ...prev,
+      customer: c.displayName || `${c.firstName} ${c.lastName}`.trim(),
+      customerEmail: c.email || '', customerMobile: c.mobile || c.phone || '',
+      customerDesignation: c.designation || '',
+    }));
+    setCustInput(c.email || '');
+    setCustResults([]);
+  };
+
+  const clearCustomer = () => {
+    setForm(prev => ({ ...prev, customer: '', customerEmail: '', customerMobile: '', customerDesignation: '' }));
+    setCustInput(''); setCustResults([]);
+  };
+
+  const handleSubmit = async () => {
+    if (!form.customer.trim()) { Alert.alert('Validation', 'Customer name is required'); return; }
+    setSubmitting(true);
+    try {
+      const endpoint = isEditing ? `/daily-call-reports/${reportId}` : '/daily-call-reports';
+      const method = isEditing ? 'PUT' : 'POST';
+
+      // Build multipart/form-data payload (matches web version)
+      const payload = new FormData();
+      Object.entries(form).forEach(([key, val]) => {
+        if (val !== undefined && val !== null && val !== '') {
+          payload.append(key, val as string);
+        }
+      });
+
+      await apiClient(endpoint, { method, body: payload });
+      Alert.alert('Success', `Report ${isEditing ? 'updated' : 'created'} successfully`);
+      onBack();
+    } catch (err: any) {
+      Alert.alert('Error', err.message || 'Error saving report');
+    }
+    setSubmitting(false);
+  };
+
+  if (loading) {
+    return (
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: C.bg }}>
+        <ActivityIndicator size="large" color={C.primary} />
+      </View>
+    );
+  }
+
+  const workNatureOpts: Opt[] = [
+    { label: 'Service', value: 'Service' },
+    { label: 'Installation', value: 'Installation' },
+    { label: 'Software Enquiry', value: 'Software Enquiry' },
+    { label: 'Cold Call Visit', value: 'Cold call visit' },
+    { label: 'Meeting', value: 'Meeting ' },
+    { label: 'Hardware Enquiry', value: 'Hardware Enquiry' },
+    { label: 'Material Delivery', value: 'Material Delivery' },
+    { label: 'Material Collection', value: 'Material collection' },
+    { label: 'Self Pickup', value: 'Self pickup' },
+    { label: 'Rental Pickup', value: 'Rental pickup' },
+    { label: 'Demo', value: 'Demo' },
+    { label: 'Others', value: 'Others' },
+  ];
+
+  return (
+    <SafeAreaView style={s.safeArea}>
+      {/* Header */}
+      <View style={s.header}>
+        <TouchableOpacity onPress={onBack} style={s.backBtn}>
+          <Svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+            stroke={C.text} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <Polyline points="15 18 9 12 15 6" />
+          </Svg>
+        </TouchableOpacity>
+        <View>
+          <Text style={s.headerTitle}>Daily Call Report</Text>
+          <Text style={s.headerSub}>Capture call details and track resolutions</Text>
+        </View>
+        <View style={{ width: 32 }} />
+      </View>
+
+      <ScrollView contentContainerStyle={s.scroll} keyboardShouldPersistTaps="handled">
+
+        {/* ── SECTION 1: Call Details ── */}
+        <Card title="Call Details">
+          <DatePickerField label="Date" value={form.date}
+            onChange={(v: string) => set('date', v)} required />
+          <SelectField label="Work Nature" value={form.workNature}
+            options={workNatureOpts} onSelect={v => set('workNature', v)} required />
+          {form.workNature === 'Others' && (
+            <TextRow label="Specify Work Nature" value={form.otherWorkNature}
+              onChange={(v: string) => set('otherWorkNature', v)} placeholder="Enter work nature" required />
+          )}
+          <SelectField label="Mode" value={form.directOnline}
+            options={[{ label: 'Direct', value: 'Direct' }, { label: 'Online', value: 'Online' }]}
+            onSelect={v => set('directOnline', v)} required />
+          <SelectField label="Customer Type" value={form.customerType}
+            options={[{ label: 'New Customer', value: 'New' }, { label: 'Existing Customer', value: 'Existing' }]}
+            onSelect={v => { set('customerType', v); clearCustomer(); }} />
+          <SelectField label="Person Aligned" value={form.personAligned}
+            options={[{ label: '— Select Person —', value: '' }, ...users.map(u => ({
+              label: `${u.firstName} ${u.lastName}`.trim() + (u.designation ? ` (${u.designation})` : ''),
+              value: `${u.firstName} ${u.lastName}`.trim(),
+            }))]}
+            onSelect={v => set('personAligned', v)} />
+        </Card>
+
+        {/* ── SECTION 2: Customer Details ── */}
+        <Card title="Customer Details">
+          {form.customerType === 'Existing' ? (
+            <View>
+              <Field>
+                <Label text="Search by Email" required />
+                <View style={{ position: 'relative' }}>
+                  <TextInput
+                    style={s.input}
+                    value={custInput}
+                    onChangeText={handleCustSearch}
+                    placeholder="Type customer email to search..."
+                    placeholderTextColor={C.textSub}
+                    autoCapitalize="none"
+                    keyboardType="email-address"
+                  />
+                  {searchingCust && (
+                    <ActivityIndicator size="small" color={C.blue}
+                      style={{ position: 'absolute', right: 12, top: 12 }} />
+                  )}
+                </View>
+                {custResults.length > 0 && (
+                  <View style={s.dropdown}>
+                    {custResults.map((c: any) => (
+                      <TouchableOpacity key={c._id} style={s.dropRow} onPress={() => selectCustomer(c)}>
+                        <Text style={s.dropName}>
+                          {c.displayName || `${c.firstName} ${c.lastName}`.trim()}
+                        </Text>
+                        <Text style={s.dropSub}>{c.email} · {c.mobile || c.phone}</Text>
+                      </TouchableOpacity>
+                    ))}
+                  </View>
+                )}
+              </Field>
+              {form.customer ? (
+                <View style={s.custInfoBox}>
+                  <View style={s.custNameRow}>
+                    <Text style={s.custNameLabel}>Customer</Text>
+                    <Text style={s.custNameValue}>{form.customer}</Text>
+                    <TouchableOpacity onPress={clearCustomer} style={s.clearBtn}>
+                      <Text style={{ color: C.primary, fontSize: 12, fontWeight: '700' }}>Clear</Text>
+                    </TouchableOpacity>
+                  </View>
+                  <TextRow label="Mobile Number" value={form.customerMobile}
+                    onChange={(v: string) => set('customerMobile', v)} placeholder="Mobile number" keyboardType="phone-pad" />
+                  <TextRow label="Designation" value={form.customerDesignation}
+                    onChange={(v: string) => set('customerDesignation', v)} placeholder="Designation" />
+                </View>
+              ) : null}
+            </View>
+          ) : (
+            <View>
+              <TextRow label="Customer Name" value={form.customer}
+                onChange={(v: string) => set('customer', v)} placeholder="Enter customer name" required />
+              <TextRow label="Mobile Number" value={form.customerMobile}
+                onChange={(v: string) => set('customerMobile', v)} placeholder="Enter mobile number" keyboardType="phone-pad" />
+              <TextRow label="Designation" value={form.customerDesignation}
+                onChange={(v: string) => set('customerDesignation', v)} placeholder="Enter designation" />
+            </View>
+          )}
+        </Card>
+
+        {/* ── Hardware Details ── */}
+        {isHardware && (
+          <Card title={wn === 'Hardware Enquiry' ? 'Hardware Details' : 'Product Details'}>
+            <TextRow label="Product / Model" value={form.product}
+              onChange={(v: string) => set('product', v)} placeholder="Enter product model" />
+            <TextRow label="Serial Number" value={form.serialNumber}
+              onChange={(v: string) => set('serialNumber', v)} placeholder="Enter serial number" />
+            <TextRow label="Brand" value={form.brand}
+              onChange={(v: string) => set('brand', v)} placeholder="Enter brand" />
+            <TextRow label="Specification" value={form.specification}
+              onChange={(v: string) => set('specification', v)} placeholder="e.g. RAM, CPU" />
+          </Card>
+        )}
+
+        {/* ── Software Details ── */}
+        {isSoftware && (
+          <Card title="Software Details">
+            <TextRow label="Application Name" value={form.applicationName}
+              onChange={(v: string) => set('applicationName', v)} placeholder="Enter application name" />
+          </Card>
+        )}
+
+        {/* ── Delivery Details ── */}
+        {isDelivery && (
+          <Card title="Delivery Details">
+            <TextRow label="Doc Number" value={form.docNumber}
+              onChange={(v: string) => set('docNumber', v)} placeholder="Document number" />
+            <DatePickerField label="Doc Date" value={form.docDate}
+              onChange={(v: string) => set('docDate', v)} />
+            <TimePickerField label="In Time" value={form.inTime}
+              onChange={(v: string) => set('inTime', v)} />
+            <TimePickerField label="Out Time" value={form.outTime}
+              onChange={(v: string) => set('outTime', v)} />
+          </Card>
+        )}
+
+        {/* ── Logistics / Pickup ── */}
+        {isPickup && (
+          <Card title="Logistics Details">
+            <TextRow label="Vehicle Number" value={form.vehicleNumber}
+              onChange={(v: string) => set('vehicleNumber', v)} placeholder="e.g. TN01AB1234" />
+            <TextRow label="Location" value={form.location}
+              onChange={(v: string) => set('location', v)} placeholder="Pickup/drop location" />
+            <TextRow label="Distance (KM)" value={form.km}
+              onChange={(v: string) => set('km', v)} placeholder="0" keyboardType="numeric" />
+            <TextRow label="Amount (₹)" value={form.amount}
+              onChange={(v: string) => set('amount', v)} placeholder="0.00" keyboardType="numeric" />
+            <TimePickerField label="In Time" value={form.inTime}
+              onChange={(v: string) => set('inTime', v)} />
+            <TimePickerField label="Out Time" value={form.outTime}
+              onChange={(v: string) => set('outTime', v)} />
+          </Card>
+        )}
+
+        {/* ── Resolution ── */}
+        {showRes && (
+          <Card title="Resolution">
+            <TextRow label="Problem Statement" value={form.problemStatement}
+              onChange={(v: string) => set('problemStatement', v)} placeholder="Briefly describe the problem" multiline />
+            <TextRow label="Current Status" value={form.status}
+              onChange={(v: string) => set('status', v)} placeholder="Enter current status" />
+            <SelectField label="Outcome" value={form.closedPending}
+              options={[
+                { label: 'Closed', value: 'Closed' },
+                { label: 'Pending', value: 'Pending' },
+                { label: 'Processing', value: 'Processing' },
+              ]}
+              onSelect={v => set('closedPending', v)} required />
+            {isHardware && (
+              <>
+                <TimePickerField label="In Time" value={form.inTime}
+                  onChange={(v: string) => set('inTime', v)} />
+                <TimePickerField label="Out Time" value={form.outTime}
+                  onChange={(v: string) => set('outTime', v)} />
+              </>
+            )}
+          </Card>
+        )}
+
+        {/* ── Tracking & Additional Info ── */}
+        <Card title="Tracking & Additional Info">
+          <SelectField label="OEM" value={form.oem}
+            options={[
+              { label: '— Select OEM —', value: '' },
+              { label: 'Atpl', value: 'Atpl' },
+              { label: 'Infyot', value: 'Infyot' },
+              { label: 'Embsys', value: 'Embsys' },
+              { label: 'Bartender', value: 'Bartender' },
+            ]}
+            onSelect={v => set('oem', v)} />
+          <DatePickerField label="Follow-up Date" value={form.followUpDate}
+            onChange={(v: string) => set('followUpDate', v)} />
+          <TextRow label="Reminder Notes" value={form.reminder}
+            onChange={(v: string) => set('reminder', v)} placeholder="Reminder details..." />
+          <TextRow label="Remarks" value={form.remarks}
+            onChange={(v: string) => set('remarks', v)} placeholder="Any additional remarks" />
+          <TextRow label="Report Path / Link" value={form.reportPath}
+            onChange={(v: string) => set('reportPath', v)} placeholder="Enter a URL or path (optional)" />
+        </Card>
+
+        {/* ── Actions ── */}
+        <View style={s.actions}>
+          <TouchableOpacity style={s.cancelBtn} onPress={onBack}>
+            <Text style={s.cancelText}>Cancel</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={s.submitBtn} onPress={handleSubmit} disabled={submitting}>
+            {submitting
+              ? <ActivityIndicator color={C.white} />
+              : <Text style={s.submitText}>{isEditing ? 'Update Report' : 'Submit Report'}</Text>
+            }
+          </TouchableOpacity>
+        </View>
+
+        <View style={{ height: 40 }} />
+      </ScrollView>
+    </SafeAreaView>
+  );
+};
+
+// ─── Styles ────────────────────────────────────────────────────────────────
+const s = StyleSheet.create({
+  safeArea: { flex: 1, backgroundColor: C.bg },
+  header: {
+    flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between',
+    paddingHorizontal: 16, paddingVertical: 12,
+    backgroundColor: C.white, borderBottomWidth: 1, borderBottomColor: C.border,
+  },
+  backBtn: { padding: 8, marginLeft: -8 },
+  headerTitle: { fontSize: 17, fontWeight: '700', color: C.text },
+  headerSub: { fontSize: 12, color: C.textSub, marginTop: 2 },
+  scroll: { padding: 16 },
+  card: {
+    backgroundColor: C.white, borderRadius: 16, padding: 16,
+    marginBottom: 16, borderWidth: 1, borderColor: C.border,
+  },
+  sectionTitle: { fontSize: 14, fontWeight: '700', color: C.primary, marginBottom: 12 },
+  fieldWrap: { marginBottom: 14 },
+  label: { fontSize: 13, fontWeight: '600', color: C.textSub, marginBottom: 6 },
+  input: {
+    borderWidth: 1, borderColor: C.border, borderRadius: 8,
+    paddingHorizontal: 12, paddingVertical: Platform.OS === 'ios' ? 11 : 9,
+    fontSize: 14, color: C.text, backgroundColor: C.white,
+  },
+  // Modal picker
+  overlay: { flex: 1, backgroundColor: 'rgba(0,0,0,0.45)', justifyContent: 'flex-end' },
+  sheet: {
+    backgroundColor: C.white, borderTopLeftRadius: 20, borderTopRightRadius: 20,
+    maxHeight: '60%', paddingBottom: 24,
+  },
+  sheetTitle: {
+    fontSize: 15, fontWeight: '700', color: C.text,
+    paddingHorizontal: 20, paddingVertical: 16, borderBottomWidth: 1, borderBottomColor: C.border,
+  },
+  sheetRow: { paddingVertical: 14, paddingHorizontal: 20, borderBottomWidth: 1, borderBottomColor: C.border },
+  sheetRowText: { fontSize: 15, color: C.text },
+  // Customer search dropdown
+  dropdown: {
+    marginTop: 4, borderWidth: 1, borderColor: C.border,
+    borderRadius: 10, backgroundColor: C.white, overflow: 'hidden',
+  },
+  dropRow: { paddingVertical: 10, paddingHorizontal: 14, borderBottomWidth: 1, borderBottomColor: C.border },
+  dropName: { fontSize: 14, fontWeight: '600', color: C.text },
+  dropSub: { fontSize: 12, color: C.textSub, marginTop: 2 },
+  // Customer info box
+  custInfoBox: {
+    marginTop: 12, backgroundColor: C.slate50, borderRadius: 10,
+    borderWidth: 1, borderColor: C.border, padding: 12,
+  },
+  custNameRow: { flexDirection: 'row', alignItems: 'center', marginBottom: 10 },
+  custNameLabel: { fontSize: 13, color: C.textSub, fontWeight: '600', marginRight: 8 },
+  custNameValue: { flex: 1, fontSize: 14, fontWeight: '700', color: C.text },
+  clearBtn: {
+    paddingHorizontal: 10, paddingVertical: 4, borderRadius: 6,
+    borderWidth: 1, borderColor: C.primary,
+  },
+  // Actions
+  actions: { flexDirection: 'row', justifyContent: 'flex-end', gap: 12, marginTop: 4 },
+  cancelBtn: {
+    paddingVertical: 11, paddingHorizontal: 24, borderRadius: 8,
+    backgroundColor: C.slate50, borderWidth: 1, borderColor: C.border,
+  },
+  cancelText: { fontSize: 14, fontWeight: '700', color: C.textSub },
+  submitBtn: {
+    paddingVertical: 11, paddingHorizontal: 28, borderRadius: 8,
+    backgroundColor: C.primary, minWidth: 130, alignItems: 'center',
+  },
+  submitText: { fontSize: 14, fontWeight: '700', color: C.white },
+});
+
+
+
+================================================
+--- File: D:\Enquiry_Application\src\screens\HomeScreen.tsx ---
+================================================
+
 import React, { useState, useEffect, useRef } from 'react';
 import {
   Alert,
@@ -1725,6 +2954,9 @@ import {
   ActivityIndicator,
   Animated,
   Image,
+  BackHandler,
+  Linking,
+  Platform,
 } from 'react-native';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import Svg, { Circle, Rect, Path, Line, Polyline, Ellipse, Polygon } from 'react-native-svg';
@@ -1738,6 +2970,7 @@ import apiClient from '../api/apiClient';
 import { sendLocalNotification } from '../utils/notifications';
 import * as ImagePicker from 'expo-image-picker';
 import * as DocumentPicker from 'expo-document-picker';
+import * as Location from 'expo-location';
 const COLORS = {
   bg: '#F5F7F9',
   white: '#FFFFFF',
@@ -2180,6 +3413,7 @@ interface HomeScreenProps {
   onSettingsPress?: () => void;
   onApplyLeave?: (leaveData: any) => void;
   onMessagePress?: () => void;
+  onDailyCallReportPress?: () => void;
 }
 
 const getHolidayIcon = (holidayName: string, color: string) => {
@@ -2271,12 +3505,11 @@ const getHolidayIcon = (holidayName: string, color: string) => {
       </Svg>
     );
   }
-
   // Fallback to text initial
   return <Text style={{ fontSize: 16, fontWeight: 'bold', color }}>{holidayName ? holidayName.charAt(0) : 'H'}</Text>;
 };
 
-export const HomeScreen: React.FC<HomeScreenProps> = ({ initialNav, onLogout, onApplyLeave, onSettingsPress, onMessagePress }) => {
+export const HomeScreen: React.FC<HomeScreenProps> = ({ initialNav, onLogout, onApplyLeave, onSettingsPress, onMessagePress, onDailyCallReportPress }) => {
   const insets = useSafeAreaInsets();
   // Animation for Bottom Tab Bar
   const lastScrollY = useRef(0);
@@ -2304,6 +3537,25 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ initialNav, onLogout, on
     lastScrollY.current = currentScrollY;
   };
 
+  const floatAnim = useRef(new Animated.Value(0)).current;
+
+  useEffect(() => {
+    Animated.loop(
+      Animated.sequence([
+        Animated.timing(floatAnim, {
+          toValue: -8, // subtle float
+          duration: 2000,
+          useNativeDriver: true,
+        }),
+        Animated.timing(floatAnim, {
+          toValue: 0,
+          duration: 2000,
+          useNativeDriver: true,
+        }),
+      ])
+    ).start();
+  }, [floatAnim]);
+
   const [activeTab, setActiveTab] = useState('My Space');
   const [activeNav, setActiveNav] = useState(initialNav || 'Activities');
   const [activeTeamNav, setActiveTeamNav] = useState('Team Space');
@@ -2313,6 +3565,26 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ initialNav, onLogout, on
 
   const [employeeModalVisible, setEmployeeModalVisible] = useState(false);
   const [selectedEmployee, setSelectedEmployee] = useState<any>(null);
+
+  useEffect(() => {
+    const backAction = () => {
+      if (activeNav !== 'Activities' && activeTab === 'My Space') {
+        setActiveNav('Activities');
+        return true;
+      } else if (activeTab === 'Team' && activeTeamNav !== 'Team Space') {
+        setActiveTeamNav('Team Space');
+        return true;
+      } else if (activeTab !== 'My Space') {
+        setActiveTab('My Space');
+        setActiveNav('Activities');
+        return true;
+      }
+      return false;
+    };
+
+    const backHandler = BackHandler.addEventListener('hardwareBackPress', backAction);
+    return () => backHandler.remove();
+  }, [activeTab, activeNav, activeTeamNav]);
 
   const [selectedLeave, setSelectedLeave] = useState<any>(null);
   const [leaveModalVisible, setLeaveModalVisible] = useState(false);
@@ -2346,9 +3618,10 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ initialNav, onLogout, on
   const [pendingTeamRegularizations, setPendingTeamRegularizations] = useState<any[]>([]);
   const [loadingApprovals, setLoadingApprovals] = useState(false);
   const [hasNotifiedAdmin, setHasNotifiedAdmin] = useState(false);
+  const [isProcessingCheckIn, setIsProcessingCheckIn] = useState(false);
 
   const addFileToProfile = (file: { uri: string, type: string, name: string }) => {
-    const currentFiles = editProfileData.certificationsFiles || [];
+    const currentFiles = Array.isArray(editProfileData.certificationsFiles) ? editProfileData.certificationsFiles : [];
     setEditProfileData({
       ...editProfileData,
       certificationsFiles: [...currentFiles, file]
@@ -2690,18 +3963,36 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ initialNav, onLogout, on
 
         let previousSeconds = 0;
         if (todayRecord.totalHours) {
-          previousSeconds = Math.floor(todayRecord.totalHours * 3600);
+          if (typeof todayRecord.totalHours === 'number') {
+            previousSeconds = Math.floor(todayRecord.totalHours * 3600);
+          } else if (typeof todayRecord.totalHours === 'string') {
+            if (todayRecord.totalHours.includes(':')) {
+               const parts = todayRecord.totalHours.split(':');
+               previousSeconds = (parseInt(parts[0]) || 0) * 3600 + (parseInt(parts[1]) || 0) * 60;
+            } else {
+               previousSeconds = Math.floor((parseFloat(todayRecord.totalHours) || 0) * 3600);
+            }
+          }
+          if (isNaN(previousSeconds)) previousSeconds = 0;
         }
 
         if (todayRecord.sessions && todayRecord.sessions.length > 0) {
           setSessionLogs(todayRecord.sessions);
-          const lastSession = todayRecord.sessions[todayRecord.sessions.length - 1];
+          // Find if ANY session in the array is currently active (missing a checkout time)
+          const isSessionClosed = (s: any) => s.checkOut || s.checkout || s.checkOutTime || s.endTime;
+          const activeSession = todayRecord.sessions.find((s: any) => !isSessionClosed(s));
+          const targetSession = activeSession || todayRecord.sessions[todayRecord.sessions.length - 1];
 
-          // Check multiple possible property names from the backend
-          let hasCheckedOut = lastSession.checkOut || lastSession.checkout || lastSession.checkOutTime || lastSession.endTime;
+          let hasCheckedOut = !activeSession;
 
-          const checkInDate = new Date(lastSession.checkIn || lastSession.checkin || lastSession.startTime);
-          const currentSessionSeconds = Math.floor((new Date().getTime() - checkInDate.getTime()) / 1000);
+          const checkInRaw = targetSession.checkIn || targetSession.checkin || targetSession.startTime || targetSession.checkInTime;
+          let currentSessionSeconds = 0;
+          if (checkInRaw) {
+            const checkInDate = new Date(checkInRaw);
+            if (!isNaN(checkInDate.getTime())) {
+              currentSessionSeconds = Math.floor((new Date().getTime() - checkInDate.getTime()) / 1000);
+            }
+          }
 
           // BUGFIX: The Windows backend sometimes marks the day as 'Present' but fails to save the checkout 
           // timestamp inside the session object. If a session has no checkout time but is over 24 hours old, 
@@ -2784,53 +4075,155 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ initialNav, onLogout, on
   }, [activeTab, activeTeamNav, user]);
 
   const handleCheckInToggle = async () => {
+    if (isProcessingCheckIn) return;
+    setIsProcessingCheckIn(true);
     try {
       if (checkedIn) {
-        // Try the default POST /check-out first
+        // ── CHECKOUT: optionally send last known location ──
         try {
-          await attendanceApi.checkOut();
-        } catch (e: any) {
-          console.log("Standard POST /check-out failed, trying alternatives...", e.message);
-          // Fallback 1: Try PUT /check-out
+          // Try to get location for checkout too (backend now accepts it)
+          let checkOutLocation: { lat: number; lng: number; address?: string } | undefined;
           try {
-            await apiClient('/attendance/check-out', { method: 'PUT' });
-          } catch (e2) {
-            // Fallback 2: Try POST /checkout (no hyphen)
-            try {
-              await apiClient('/attendance/checkout', { method: 'POST' });
-            } catch (e3) {
-              // Fallback 3: Try PUT /checkout (no hyphen)
+            const locPerms = await Location.getForegroundPermissionsAsync();
+            if (locPerms.status === 'granted') {
+              let loc = await Location.getLastKnownPositionAsync();
+              if (!loc) {
+                loc = await Promise.race([
+                  Location.getCurrentPositionAsync({ accuracy: Location.Accuracy.Balanced }),
+                  new Promise<any>((_, reject) => setTimeout(() => reject(new Error('Timeout')), 5000))
+                ]);
+              }
+              if (loc) {
+                const geocode = await Location.reverseGeocodeAsync({
+                  latitude: loc.coords.latitude,
+                  longitude: loc.coords.longitude,
+                });
+                const g = geocode[0];
+                const address = g
+                  ? [g.name, g.street, g.district, g.city, g.region].filter(Boolean).join(', ')
+                  : undefined;
+                checkOutLocation = { lat: loc.coords.latitude, lng: loc.coords.longitude, address };
+              }
+            }
+          } catch (_) { /* location optional on checkout */ }
+
+          await attendanceApi.checkOut(checkOutLocation);
+        } catch (e: any) {
+          console.log('Standard check-out failed, trying alternatives...', e.message);
+          try { await apiClient('/attendance/check-out', { method: 'PUT' }); } catch (e2) {
+            try { await apiClient('/attendance/checkout', { method: 'POST' }); } catch (e3) {
               await apiClient('/attendance/checkout', { method: 'PUT' });
             }
           }
         }
         setCheckedIn(false);
-        fetchAttendance(); // Re-sync exact time from server
+        setTimeout(fetchAttendance, 1500);
       } else {
-        await attendanceApi.checkIn();
+        // ── CHECK-IN: require location ──
+
+        // 1. Check if location services are enabled
+        const serviceEnabled = await Location.hasServicesEnabledAsync();
+        if (!serviceEnabled) {
+          Alert.alert(
+            '📍 Location is Off',
+            'Your device GPS/Location is turned OFF.\n\nPlease enable Location Services to check in.',
+            [
+              { text: 'Cancel', style: 'cancel' },
+              {
+                text: '⚙️ Enable Location',
+                onPress: () => {
+                  if (Platform.OS === 'android') {
+                    Linking.sendIntent('android.settings.LOCATION_SOURCE_SETTINGS').catch(() =>
+                      Linking.openSettings()
+                    );
+                  } else {
+                    Linking.openURL('App-Prefs:Privacy&path=LOCATION').catch(() =>
+                      Linking.openSettings()
+                    );
+                  }
+                },
+              },
+            ]
+          );
+          return;
+        }
+
+        // 2. Request permission
+        const { status } = await Location.requestForegroundPermissionsAsync();
+        if (status !== 'granted') {
+          Alert.alert(
+            '📍 Permission Denied',
+            'Location permission is required to check in. Please allow location access in your device settings.',
+            [{ text: 'OK' }]
+          );
+          return;
+        }
+
+        // 3. Get coordinates (with 10-second timeout to avoid freeze)
+        let loc: any = null;
+        try {
+          loc = await Promise.race([
+            Location.getCurrentPositionAsync({ accuracy: Location.Accuracy.Balanced }),
+            new Promise<any>((_, reject) => setTimeout(() => reject(new Error('Timeout getting location')), 10000))
+          ]);
+        } catch (locErr) {
+          // If it times out, try last known
+          try {
+            loc = await Location.getLastKnownPositionAsync();
+          } catch (e) {}
+        }
+
+        if (!loc) {
+          Alert.alert("GPS Warning", "Could not get your exact location. Checking in without GPS coordinates.");
+        }
+
+        let address: string | undefined;
+        if (loc) {
+          try {
+            const geocode = await Location.reverseGeocodeAsync({
+              latitude: loc.coords.latitude,
+              longitude: loc.coords.longitude,
+            });
+            const g = geocode[0];
+            if (g) {
+              address = [g.name, g.street, g.district, g.city, g.region, g.country]
+                .filter(Boolean)
+                .join(', ');
+            }
+          } catch (_) { /* address is optional — check-in will still work */ }
+        }
+
+        // 5. Check in with { lat, lng, address } format (or empty if GPS failed)
+        const locationPayload = loc ? {
+          lat: loc.coords.latitude,
+          lng: loc.coords.longitude,
+          address,
+        } : undefined;
+
+        const res = await attendanceApi.checkIn(locationPayload);
+        Alert.alert("Success", "Checked in successfully!");
+        
         setCheckedIn(true);
-        fetchAttendance(); // Re-sync exact time from server
+        // Do not immediately fetch attendance to prevent UI bouncing if server is slow
+        setTimeout(fetchAttendance, 2000);
       }
     } catch (err: any) {
-      const errorMsg = err.message || "";
-      console.log("Check-in/out error details:", errorMsg);
+      const errorMsg = err.message || '';
+      console.log('Check-in/out error details:', errorMsg);
 
-      // If the backend yells at us that we are already checked in, flip the button automatically!
-      if (errorMsg.toLowerCase().includes("active session") || errorMsg.toLowerCase().includes("already")) {
-        Alert.alert("Synced!", "You were already checked in on the server! We updated your button to say Check-Out.");
+      if (errorMsg.toLowerCase().includes('active session')) {
+        Alert.alert('Synced!', 'You were already checked in on the server! We updated your button to say Check-Out.');
         setCheckedIn(true);
-        fetchAttendance();
+        setTimeout(fetchAttendance, 2000);
+      } else if (errorMsg.toLowerCase().includes('maximum')) {
+        Alert.alert('Shift Limit Reached', 'You have reached the maximum number of check-ins allowed for today (5 sessions).');
+        setCheckedIn(false);
       } else {
-        // Detect if this is a stuck session (like the 47 hour one)
-        if (seconds > 86400) { // More than 24 hours
-          Alert.alert(
-            "Session Stuck",
-            `Your check-in is from over 24 hours ago. The server might not allow a normal checkout.\n\nPlease use the Regularize button (the green circle icon at the top) to fix this missed punch.\n\nServer Error: ${errorMsg}`
-          );
-        } else {
-          Alert.alert("Error", `Could not update attendance status.\nDetails: ${errorMsg}`);
-        }
+        Alert.alert('Check-In Failed', errorMsg || 'Could not update attendance status on the server.');
+        setCheckedIn(false);
       }
+    } finally {
+      setIsProcessingCheckIn(false);
     }
   };
 
@@ -2911,6 +4304,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ initialNav, onLogout, on
   }, [checkedIn]);
 
   const formatTimer = (s: number) => {
+    if (isNaN(s)) s = 0;
     const h = String(Math.floor(s / 3600)).padStart(2, '0');
     const m = String(Math.floor((s % 3600) / 60)).padStart(2, '0');
     const sec = String(s % 60).padStart(2, '0');
@@ -2967,19 +4361,16 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ initialNav, onLogout, on
             </Svg>
           </TouchableOpacity>
           <View>
-            <Text style={{ fontSize: 13, color: '#6B7280', marginBottom: 2 }}>Good Morning,</Text>
+            <Text style={{ fontSize: 13, color: '#6B7280', marginBottom: 2 }}>
+              {new Date().getHours() < 12 ? 'Good Morning' : new Date().getHours() < 17 ? 'Good Afternoon' : 'Good Evening'},
+            </Text>
             <Text style={{ fontSize: 20, fontWeight: '800', color: '#1A1F2E' }}>{user ? user.firstName : 'Loading...'}</Text>
           </View>
         </View>
 
         {/* Right: Search + Bell + Clock (Regularization) */}
         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 12 }}>
-          <TouchableOpacity
-            style={{ width: 44, height: 44, borderRadius: 22, backgroundColor: '#F3F4F6', justifyContent: 'center', alignItems: 'center' }}
-            onPress={() => { if (!checkedIn) { Alert.alert("Check-In Required", "Please check-in first.", [{ text: "Cancel", style: "cancel" }, { text: "Check-In", onPress: handleCheckInToggle }]); return; } }}
-          >
-            <Svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1A1F2E" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><Circle cx="11" cy="11" r="8" /><Line x1="21" y1="21" x2="16.65" y2="16.65" /></Svg>
-          </TouchableOpacity>
+
           <TouchableOpacity
             style={{ width: 44, height: 44, borderRadius: 22, backgroundColor: '#F3F4F6', justifyContent: 'center', alignItems: 'center', position: 'relative' }}
             onPress={() => { if (!checkedIn) { Alert.alert("Check-In Required", "Please check-in first.", [{ text: "Cancel", style: "cancel" }, { text: "Check-In", onPress: handleCheckInToggle }]); return; } }}
@@ -2996,32 +4387,42 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ initialNav, onLogout, on
           >
             <Svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1A1F2E" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><Circle cx="12" cy="12" r="10" /><Polyline points="12 6 12 12 16 14" /></Svg>
           </TouchableOpacity>
+          <TouchableOpacity
+            style={{ width: 44, height: 44, borderRadius: 22, backgroundColor: '#FEE2E2', justifyContent: 'center', alignItems: 'center' }}
+            onPress={() => {
+              Alert.alert("Logout", "Are you sure you want to sign out?", [
+                { text: "Cancel", style: "cancel" },
+                { text: "Logout", style: "destructive", onPress: onLogout }
+              ]);
+            }}
+          >
+            <Svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#EF4444" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <Path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+              <Polyline points="16 17 21 12 16 7" />
+              <Line x1="21" y1="12" x2="9" y2="12" />
+            </Svg>
+          </TouchableOpacity>
         </View>
       </View>
 
       {/* Blue Hero Card */}
-      <View style={{ marginHorizontal: 16, backgroundColor: '#39A3DD', borderRadius: 24, padding: 24, paddingRight: 100, position: 'relative', overflow: 'hidden', marginBottom: 20 }}>
+      <View style={{ marginHorizontal: 16, backgroundColor: '#39A3DD', borderRadius: 24, padding: 24, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', position: 'relative', overflow: 'hidden', marginBottom: 20 }}>
         {/* Abstract background shapes */}
         <View style={{ position: 'absolute', top: -50, right: -50, width: 200, height: 200, borderRadius: 100, backgroundColor: 'rgba(255,255,255,0.15)' }} />
         <View style={{ position: 'absolute', bottom: -30, left: 30, width: 100, height: 100, borderRadius: 50, backgroundColor: 'rgba(255,255,255,0.1)' }} />
 
-        <Text style={{ fontSize: 24, fontWeight: '700', color: '#FFF', lineHeight: 34 }}>Stay productive and{"\n"}make today count!</Text>
+        <Text style={{ flex: 1, fontSize: 23, fontWeight: '700', color: '#FFF', lineHeight: 32, marginRight: 16 }}>Stay productive{"\n"}and make today count!</Text>
 
-        {/* Target Illustration */}
-        <View style={{ position: 'absolute', right: 20, top: '50%', marginTop: -40 }}>
-          <Svg width="80" height="80" viewBox="0 0 100 100" fill="none">
-            {/* Dart shadow */}
-            <Line x1="88" y1="18" x2="55" y2="51" stroke="rgba(0,0,0,0.2)" strokeWidth="6" strokeLinecap="round" />
-            <Circle cx="50" cy="50" r="38" fill="#FFF" />
-            <Circle cx="50" cy="50" r="28" fill="#39A3DD" />
-            <Circle cx="50" cy="50" r="18" fill="#FFF" />
-            <Circle cx="50" cy="50" r="8" fill="#39A3DD" />
-            {/* Dart stick */}
-            <Line x1="85" y1="15" x2="52" y2="48" stroke="#1A1F2E" strokeWidth="4" strokeLinecap="round" />
-            {/* Dart tail */}
-            <Polyline points="85,25 85,15 75,15" fill="#EF4444" stroke="#EF4444" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" />
-            <Polyline points="80,20 90,10 80,10" fill="#EF4444" stroke="#EF4444" strokeWidth="2" />
-          </Svg>
+        {/* ATPL Logo Illustration */}
+        <View style={{ 
+          width: 110, height: 110, borderRadius: 55, backgroundColor: '#FFF',
+          justifyContent: 'center', alignItems: 'center',
+          shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.1, shadowRadius: 4, elevation: 3
+        }}>
+          <Image 
+            source={require('../../assets/archery_logo.png')} 
+            style={{ width: 75, height: 75, resizeMode: 'contain' }} 
+          />
         </View>
       </View>
 
@@ -3155,12 +4556,16 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ initialNav, onLogout, on
                 </Text>
 
                 <TouchableOpacity
-                  style={{ backgroundColor: checkedIn ? '#EF4444' : '#39A3DD', borderRadius: 100, paddingVertical: 12, alignItems: 'center' }}
+                  style={{ backgroundColor: checkedIn ? '#EF4444' : '#39A3DD', borderRadius: 100, paddingVertical: 12, alignItems: 'center', flexDirection: 'row', justifyContent: 'center' }}
                   activeOpacity={0.8}
                   onPress={handleCheckInToggle}
+                  disabled={isProcessingCheckIn}
                 >
+                  {isProcessingCheckIn ? (
+                    <ActivityIndicator size="small" color="#FFF" style={{ marginRight: 8 }} />
+                  ) : null}
                   <Text style={{ color: '#FFF', fontSize: 14, fontWeight: '700' }}>
-                    {checkedIn ? 'Check-Out' : 'Check-In'}
+                    {isProcessingCheckIn ? 'Processing...' : checkedIn ? 'Check-Out' : 'Check-In'}
                   </Text>
                 </TouchableOpacity>
               </View>
@@ -3201,10 +4606,10 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ initialNav, onLogout, on
             </View>
 
 
-            {/* ── COMPANY HOLIDAYS ── */}
+            {/* ── UPCOMING HOLIDAYS ── */}
             <View style={{ marginTop: 24, paddingHorizontal: 16 }}>
               <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
-                <Text style={{ fontSize: 16, fontWeight: '800', color: '#1A1F2E' }}>Company Holidays</Text>
+                <Text style={{ fontSize: 16, fontWeight: '800', color: '#1A1F2E' }}>Upcoming Holidays</Text>
                 <TouchableOpacity onPress={() => { if (!checkedIn) Alert.alert("Check-In Required", "Please check-in first.", [{ text: "Cancel", style: "cancel" }, { text: "Check-In", onPress: handleCheckInToggle }]); }}>
                   <Text style={{ fontSize: 14, fontWeight: '600', color: '#39A3DD' }}>View All</Text>
                 </TouchableOpacity>
@@ -3466,10 +4871,10 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ initialNav, onLogout, on
                     <Text style={profStyles.avatarEmoji}>👤</Text>
                   </View>
                 </View>
-                <Text style={profStyles.profileGreeting}>Good Evening, {user ? user.firstName : '...'}</Text>
-                <Text style={profStyles.profileName}>{user ? `${user.firstName} ${user.lastName}` : '...'}</Text>
+                <Text style={profStyles.profileGreeting}>Good Evening, {user ? user?.firstName || '' : '...'}</Text>
+                <Text style={profStyles.profileName}>{user ? `${user?.firstName || ''} ${user?.lastName || ''}` : '...'}</Text>
                 <View style={profStyles.profileRoleTag}>
-                  <Text style={profStyles.profileRoleTagText}>{user ? (user.designation || 'EMPLOYEE').toUpperCase() : '...'}</Text>
+                  <Text style={profStyles.profileRoleTagText}>{user ? (String(user?.designation || 'EMPLOYEE')).toUpperCase() : '...'}</Text>
                 </View>
 
                 <TouchableOpacity
@@ -3562,7 +4967,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ initialNav, onLogout, on
                   <View style={profStyles.infoCardIcon}><Text>✉️</Text></View>
                   <View style={profStyles.infoCardContent}>
                     <Text style={profStyles.infoCardLabel}>Email</Text>
-                    <Text style={profStyles.infoCardValue} numberOfLines={1}>{user ? user.email : '...'}</Text>
+                    <Text style={profStyles.infoCardValue} numberOfLines={1}>{user ? user?.email || '' : '...'}</Text>
                   </View>
                 </View>
               </View>
@@ -3578,8 +4983,8 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ initialNav, onLogout, on
                     placeholder="Write a short introduction about yourself"
                     placeholderTextColor={COLORS.textMuted}
                     multiline
-                    value={isEditingProfile ? (editProfileData.aboutMe || '') : (user?.aboutMe || '')}
-                    onChangeText={(val) => setEditProfileData({ ...editProfileData, aboutMe: val })}
+                    value={isEditingProfile ? (editProfileData?.aboutMe || '') : (user?.aboutMe || '')}
+                    onChangeText={(val) => setEditProfileData({ ...(editProfileData || {}), aboutMe: val })}
                     editable={isEditingProfile}
                   />
                 </View>
@@ -3599,7 +5004,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ initialNav, onLogout, on
                     <View style={profStyles.fieldWrap}>
                       <Text style={profStyles.fieldLabel}>Nick Name</Text>
                       {isEditingProfile ? (
-                        <TextInput style={[profStyles.fieldValue, { borderBottomWidth: 1, borderBottomColor: '#ccc', padding: 0 }]} value={editProfileData.nickName || ''} onChangeText={(val) => setEditProfileData({ ...editProfileData, nickName: val })} />
+                        <TextInput style={[profStyles.fieldValue, { borderBottomWidth: 1, borderBottomColor: '#ccc', padding: 0 }]} value={editProfileData?.nickName || ''} onChangeText={(val) => setEditProfileData({ ...(editProfileData || {}), nickName: val })} />
                       ) : (
                         <Text style={user?.nickName ? profStyles.fieldValue : profStyles.fieldValueEmpty}>{user?.nickName || '-'}</Text>
                       )}
@@ -3607,21 +5012,21 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ initialNav, onLogout, on
                     <View style={profStyles.fieldWrap}>
                       <Text style={profStyles.fieldLabel}>First Name</Text>
                       {isEditingProfile ? (
-                        <TextInput style={[profStyles.fieldValue, { borderBottomWidth: 1, borderBottomColor: '#ccc', padding: 0 }]} value={editProfileData.firstName || ''} onChangeText={(val) => setEditProfileData({ ...editProfileData, firstName: val })} />
+                        <TextInput style={[profStyles.fieldValue, { borderBottomWidth: 1, borderBottomColor: '#ccc', padding: 0 }]} value={editProfileData?.firstName || ''} onChangeText={(val) => setEditProfileData({ ...(editProfileData || {}), firstName: val })} />
                       ) : (
-                        <Text style={profStyles.fieldValue}>{user ? user.firstName : '...'}</Text>
+                        <Text style={profStyles.fieldValue}>{user ? user?.firstName || '' : '...'}</Text>
                       )}
                     </View>
                     <View style={profStyles.fieldWrap}>
                       <Text style={profStyles.fieldLabel}>Email Address</Text>
-                      <Text style={profStyles.fieldValue} numberOfLines={1}>{user ? user.email : '...'}</Text>
+                      <Text style={profStyles.fieldValue} numberOfLines={1}>{user ? user?.email || '' : '...'}</Text>
                     </View>
                     <View style={profStyles.fieldWrap}>
                       <Text style={profStyles.fieldLabel}>Last Name</Text>
                       {isEditingProfile ? (
-                        <TextInput style={[profStyles.fieldValue, { borderBottomWidth: 1, borderBottomColor: '#ccc', padding: 0 }]} value={editProfileData.lastName || ''} onChangeText={(val) => setEditProfileData({ ...editProfileData, lastName: val })} />
+                        <TextInput style={[profStyles.fieldValue, { borderBottomWidth: 1, borderBottomColor: '#ccc', padding: 0 }]} value={editProfileData?.lastName || ''} onChangeText={(val) => setEditProfileData({ ...(editProfileData || {}), lastName: val })} />
                       ) : (
-                        <Text style={profStyles.fieldValue}>{user ? user.lastName : '...'}</Text>
+                        <Text style={profStyles.fieldValue}>{user ? user?.lastName || '' : '...'}</Text>
                       )}
                     </View>
                   </View>
@@ -3639,12 +5044,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ initialNav, onLogout, on
                       <Text style={profStyles.fieldLabel}>Department</Text>
                       <Text style={profStyles.fieldValueEmpty}>-</Text>
                     </View>
-                    <View style={profStyles.fieldWrap}>
-                      <Text style={profStyles.fieldLabel}>Zoho Role</Text>
-                      <View style={[profStyles.badgeContainer, profStyles.badgeAdmin]}>
-                        <Text style={profStyles.badgeAdminText}>Admin</Text>
-                      </View>
-                    </View>
+
                     <View style={profStyles.fieldWrap}>
                       <Text style={profStyles.fieldLabel}>Location</Text>
                       <Text style={profStyles.fieldValueEmpty}>-</Text>
@@ -3674,7 +5074,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ initialNav, onLogout, on
                     <View style={profStyles.fieldWrap}>
                       <Text style={profStyles.fieldLabel}>Date of Birth</Text>
                       {isEditingProfile ? (
-                        <TextInput style={[profStyles.fieldValue, { borderBottomWidth: 1, borderBottomColor: '#ccc', padding: 0 }]} value={editProfileData.dob || ''} onChangeText={(val) => setEditProfileData({ ...editProfileData, dob: val })} placeholder="YYYY-MM-DD" />
+                        <TextInput style={[profStyles.fieldValue, { borderBottomWidth: 1, borderBottomColor: '#ccc', padding: 0 }]} value={editProfileData?.dob || ''} onChangeText={(val) => setEditProfileData({ ...(editProfileData || {}), dob: val })} placeholder="YYYY-MM-DD" />
                       ) : (
                         <Text style={user?.dob ? profStyles.fieldValue : profStyles.fieldValueEmpty}>{user?.dob || '-'}</Text>
                       )}
@@ -3686,7 +5086,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ initialNav, onLogout, on
                     <View style={profStyles.fieldWrapFull}>
                       <Text style={profStyles.fieldLabel}>Expertise (Ask Me About)</Text>
                       {isEditingProfile ? (
-                        <TextInput style={[profStyles.fieldValue, { borderBottomWidth: 1, borderBottomColor: '#ccc', padding: 0 }]} value={editProfileData.expertise || ''} onChangeText={(val) => setEditProfileData({ ...editProfileData, expertise: val })} />
+                        <TextInput style={[profStyles.fieldValue, { borderBottomWidth: 1, borderBottomColor: '#ccc', padding: 0 }]} value={editProfileData?.expertise || ''} onChangeText={(val) => setEditProfileData({ ...(editProfileData || {}), expertise: val })} />
                       ) : (
                         <Text style={user?.expertise ? profStyles.fieldValue : profStyles.fieldValueEmpty}>{user?.expertise || '-'}</Text>
                       )}
@@ -3705,7 +5105,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ initialNav, onLogout, on
                     <View style={profStyles.fieldWrap}>
                       <Text style={profStyles.fieldLabel}>UAN</Text>
                       {isEditingProfile ? (
-                        <TextInput style={[profStyles.fieldValue, { borderBottomWidth: 1, borderBottomColor: '#ccc', padding: 0 }]} value={editProfileData.uan || ''} onChangeText={(val) => setEditProfileData({ ...editProfileData, uan: val })} />
+                        <TextInput style={[profStyles.fieldValue, { borderBottomWidth: 1, borderBottomColor: '#ccc', padding: 0 }]} value={editProfileData?.uan || ''} onChangeText={(val) => setEditProfileData({ ...(editProfileData || {}), uan: val })} />
                       ) : (
                         <Text style={user?.uan ? profStyles.fieldValue : profStyles.fieldValueEmpty}>{user?.uan || '-'}</Text>
                       )}
@@ -3713,7 +5113,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ initialNav, onLogout, on
                     <View style={profStyles.fieldWrap}>
                       <Text style={profStyles.fieldLabel}>PAN</Text>
                       {isEditingProfile ? (
-                        <TextInput style={[profStyles.fieldValue, { borderBottomWidth: 1, borderBottomColor: '#ccc', padding: 0 }]} value={editProfileData.pan || ''} onChangeText={(val) => setEditProfileData({ ...editProfileData, pan: val })} />
+                        <TextInput style={[profStyles.fieldValue, { borderBottomWidth: 1, borderBottomColor: '#ccc', padding: 0 }]} value={editProfileData?.pan || ''} onChangeText={(val) => setEditProfileData({ ...(editProfileData || {}), pan: val })} />
                       ) : (
                         <Text style={user?.pan ? profStyles.fieldValue : profStyles.fieldValueEmpty}>{user?.pan || '-'}</Text>
                       )}
@@ -3732,7 +5132,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ initialNav, onLogout, on
                     <View style={profStyles.fieldWrap}>
                       <Text style={profStyles.fieldLabel}>Work Phone</Text>
                       {isEditingProfile ? (
-                        <TextInput style={[profStyles.fieldValue, { borderBottomWidth: 1, borderBottomColor: '#ccc', padding: 0 }]} value={editProfileData.workPhoneNumber || ''} onChangeText={(val) => setEditProfileData({ ...editProfileData, workPhoneNumber: val })} keyboardType="phone-pad" />
+                        <TextInput style={[profStyles.fieldValue, { borderBottomWidth: 1, borderBottomColor: '#ccc', padding: 0 }]} value={editProfileData?.workPhoneNumber || ''} onChangeText={(val) => setEditProfileData({ ...(editProfileData || {}), workPhoneNumber: val })} keyboardType="phone-pad" />
                       ) : (
                         <Text style={user?.workPhoneNumber ? profStyles.fieldValue : profStyles.fieldValueEmpty}>{user?.workPhoneNumber || '-'}</Text>
                       )}
@@ -3744,7 +5144,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ initialNav, onLogout, on
                     <View style={profStyles.fieldWrapFull}>
                       <Text style={profStyles.fieldLabel}>Present Address</Text>
                       {isEditingProfile ? (
-                        <TextInput style={[profStyles.fieldValue, { borderBottomWidth: 1, borderBottomColor: '#ccc', padding: 0 }]} value={editProfileData.address || ''} onChangeText={(val) => setEditProfileData({ ...editProfileData, address: val })} />
+                        <TextInput style={[profStyles.fieldValue, { borderBottomWidth: 1, borderBottomColor: '#ccc', padding: 0 }]} value={editProfileData?.address || ''} onChangeText={(val) => setEditProfileData({ ...(editProfileData || {}), address: val })} />
                       ) : (
                         <Text style={user?.address ? profStyles.fieldValue : profStyles.fieldValueEmpty}>{user?.address || '-'}</Text>
                       )}
@@ -3773,20 +5173,20 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ initialNav, onLogout, on
                       placeholder="List your certifications (e.g., AWS Certified, PMP)"
                       placeholderTextColor={COLORS.textMuted}
                       multiline
-                      value={editProfileData.certifications || ''}
-                      onChangeText={(val) => setEditProfileData({ ...editProfileData, certifications: val })}
+                      value={editProfileData?.certifications || ''}
+                      onChangeText={(val) => setEditProfileData({ ...(editProfileData || {}), certifications: val })}
                     />
                   ) : (
                     <Text style={user?.certifications ? profStyles.fieldValue : profStyles.fieldValueEmpty}>
-                      {user?.certifications || 'No certifications added yet.'}
+                      {String(user?.certifications || 'No certifications added yet.')}
                     </Text>
                   )}
                   {/* Display uploaded files */}
                   <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ marginTop: 12 }}>
-                    {(isEditingProfile ? (editProfileData.certificationsFiles || []) : (user?.certificationsFiles || [])).map((file: any, idx: number) => (
+                    {(Array.isArray(isEditingProfile ? editProfileData?.certificationsFiles : user?.certificationsFiles) ? (isEditingProfile ? editProfileData?.certificationsFiles : user?.certificationsFiles) : []).map((file: any, idx: number) => (
                       <View key={idx} style={{ marginRight: 12, position: 'relative', marginTop: 8 }}>
-                        {file.type === 'image' ? (
-                          <Image source={{ uri: file.uri }} style={{ width: 80, height: 80, borderRadius: 8, backgroundColor: '#E5E7EB' }} />
+                        {file?.type === 'image' ? (
+                          <Image source={{ uri: file?.uri }} style={{ width: 80, height: 80, borderRadius: 8, backgroundColor: '#E5E7EB' }} />
                         ) : (
                           <View style={{ width: 80, height: 80, borderRadius: 8, backgroundColor: '#FEF2F2', justifyContent: 'center', alignItems: 'center', borderWidth: 1, borderColor: '#FECACA' }}>
                             <Svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#EF4444" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -3796,16 +5196,16 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ initialNav, onLogout, on
                               <Line x1="16" y1="17" x2="8" y2="17" />
                               <Polyline points="10 9 9 9 8 9" />
                             </Svg>
-                            <Text style={{ fontSize: 10, color: '#EF4444', marginTop: 8, fontWeight: '700', maxWidth: 70 }} numberOfLines={1}>{file.name || 'PDF'}</Text>
+                            <Text style={{ fontSize: 10, color: '#EF4444', marginTop: 8, fontWeight: '700', maxWidth: 70 }} numberOfLines={1}>{file?.name || 'PDF'}</Text>
                           </View>
                         )}
                         {isEditingProfile && (
                           <TouchableOpacity
                             style={{ position: 'absolute', top: -8, right: -8, backgroundColor: '#EF4444', borderRadius: 12, padding: 4, elevation: 4, zIndex: 10 }}
                             onPress={() => {
-                              const newFiles = [...editProfileData.certificationsFiles];
+                              const newFiles = [...(editProfileData?.certificationsFiles || [])];
                               newFiles.splice(idx, 1);
-                              setEditProfileData({ ...editProfileData, certificationsFiles: newFiles });
+                              setEditProfileData({ ...(editProfileData || {}), certificationsFiles: newFiles });
                             }}
                           >
                             <Svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#FFF" strokeWidth="2.5" strokeLinecap="round">
@@ -3912,13 +5312,18 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ initialNav, onLogout, on
           <Text style={{ fontSize: 10, marginTop: 4, fontWeight: '600', color: bottomTab === 'Directory' ? '#39A3DD' : '#9CA3AF' }}>Directory</Text>
         </TouchableOpacity>
 
-        {/* Floating Center Button */}
+        {/* Floating Center Button - Daily Call Report */}
         <View style={{ flex: 1, alignItems: 'center' }}>
           <View style={{ position: 'absolute', top: -35, width: 60, height: 60, borderRadius: 30, backgroundColor: '#FFF', padding: 6, shadowColor: '#000', shadowOffset: { width: 0, height: -2 }, shadowOpacity: 0.1, shadowRadius: 6, elevation: 8 }}>
-            <TouchableOpacity style={{ width: '100%', height: '100%', borderRadius: 24, backgroundColor: '#39A3DD', justifyContent: 'center', alignItems: 'center', shadowColor: '#39A3DD', shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.3, shadowRadius: 8, elevation: 5 }}>
-              <Svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#FFF" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                <Line x1="12" y1="5" x2="12" y2="19" />
-                <Line x1="5" y1="12" x2="19" y2="12" />
+            <TouchableOpacity 
+              onPress={() => {
+                if (!checkedIn) { Alert.alert("Access Denied", "Please check-in first."); return; }
+                if (onDailyCallReportPress) onDailyCallReportPress();
+              }}
+              style={{ width: '100%', height: '100%', borderRadius: 24, backgroundColor: '#10B981', justifyContent: 'center', alignItems: 'center', shadowColor: '#10B981', shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.3, shadowRadius: 8, elevation: 5 }}>
+              {/* Phone + notepad icon representing Daily Call Report */}
+              <Svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#FFF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <Path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.27h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L7.91 8.91A16 16 0 0 0 15.09 16.09l.95-.95a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 17.92z" />
               </Svg>
             </TouchableOpacity>
           </View>
@@ -5122,16 +6527,21 @@ const leaveStyles = StyleSheet.create({
     fontWeight: '700',
   },
 });
-```
 
-### src\screens\LoginScreen.tsx
-```tsx
+
+================================================
+--- File: D:\Enquiry_Application\src\screens\LoginScreen.tsx ---
+================================================
+
 import React, { useState } from 'react';
+import { Image } from 'react-native';
 import { authApi } from '../api/authApi';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as LocalAuthentication from 'expo-local-authentication';
 import {
   ActivityIndicator,
   Alert,
+  Animated,
   KeyboardAvoidingView,
   Platform,
   SafeAreaView,
@@ -5150,16 +6560,16 @@ import {
 // ==========================================
 const theme = {
   colors: {
-    background: '#F5F7F9',   // Light Gray
-    surface: '#FFFFFF',      // White
-    surfaceLight: '#FDD7E0', // Light Pink for disabled state
-    primary: '#E85874',      // Primary Pink
-    text: '#38474F',         // Dark Gray
-    textMuted: '#8A9BA5',    // Medium Gray
-    textSecondary: '#8A9BA5', // Medium Gray
-    border: '#E5E7EB',
+    background: '#FFFFFF',    // White background
+    surface: '#F5F7FA',       // Light card
+    surfaceLight: '#FCE8EC',  // Light pink tint for disabled
+    primary: '#E85874',       // Primary Pink
+    text: '#1E293B',          // Dark text on white bg
+    textMuted: '#64748B',     // Medium Gray
+    textSecondary: '#475569', // Slate gray
+    border: '#E2E8F0',
     borderFocus: '#39A3DD',   // Primary Blue
-    error: '#C4455D',        // Dark Pink
+    error: '#C4455D',         // Dark Pink
   },
   spacing: {
     xs: 4,
@@ -5280,7 +6690,7 @@ const inputStyles = StyleSheet.create({
   input: {
     flex: 1,
     height: '100%',
-    color: theme.colors.text,
+    color: '#1E293B',
     fontSize: theme.typography.sizes.md,
     padding: 0,
   },
@@ -5377,10 +6787,114 @@ interface LoginScreenProps {
 export const LoginScreen: React.FC<LoginScreenProps> = ({ onLoginSuccess }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  
+
   const [emailError, setEmailError] = useState('');
   const [passwordError, setPasswordError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [isBiometricSupported, setIsBiometricSupported] = useState(false);
+
+  const floatAnim = React.useRef(new Animated.Value(0)).current;
+  const logoScaleAnim = React.useRef(new Animated.Value(0.3)).current;
+  const logoOpacityAnim = React.useRef(new Animated.Value(0)).current;
+  const cardSlideAnim = React.useRef(new Animated.Value(50)).current;
+  const cardOpacityAnim = React.useRef(new Animated.Value(0)).current;
+
+  React.useEffect(() => {
+    (async () => {
+      const compatible = await LocalAuthentication.hasHardwareAsync();
+      setIsBiometricSupported(compatible);
+    })();
+
+    // Entrance Animations
+    Animated.parallel([
+      Animated.spring(logoScaleAnim, {
+        toValue: 1,
+        tension: 10,
+        friction: 4,
+        useNativeDriver: true,
+      }),
+      Animated.timing(logoOpacityAnim, {
+        toValue: 1,
+        duration: 800,
+        useNativeDriver: true,
+      }),
+      Animated.timing(cardOpacityAnim, {
+        toValue: 1,
+        duration: 600,
+        delay: 300,
+        useNativeDriver: true,
+      }),
+      Animated.spring(cardSlideAnim, {
+        toValue: 0,
+        tension: 20,
+        friction: 7,
+        delay: 300,
+        useNativeDriver: true,
+      }),
+    ]).start();
+
+    // Floating loop animation for logo
+    Animated.loop(
+      Animated.sequence([
+        Animated.timing(floatAnim, {
+          toValue: -12,
+          duration: 2000,
+          useNativeDriver: true,
+        }),
+        Animated.timing(floatAnim, {
+          toValue: 0,
+          duration: 2000,
+          useNativeDriver: true,
+        }),
+      ])
+    ).start();
+  }, [floatAnim, logoScaleAnim, logoOpacityAnim, cardSlideAnim, cardOpacityAnim]);
+
+  const handleBiometricLogin = async () => {
+    try {
+      const compatible = await LocalAuthentication.hasHardwareAsync();
+      if (!compatible) {
+        Alert.alert('Not Supported', 'This device/emulator does not support biometric authentication. If you are on an emulator, please configure fingerprint settings.');
+        return;
+      }
+
+      const savedEmail = await AsyncStorage.getItem('userEmail');
+      const savedPassword = await AsyncStorage.getItem('userPassword');
+
+      if (!savedEmail || !savedPassword) {
+        Alert.alert('Setup Required', 'Please login with your email and password first to enable biometric login.');
+        return;
+      }
+
+      const isEnrolled = await LocalAuthentication.isEnrolledAsync();
+      if (!isEnrolled) {
+        Alert.alert('No Biometrics Found', 'Please set up Face ID or Touch ID on your device.');
+        return;
+      }
+
+      const result = await LocalAuthentication.authenticateAsync({
+        promptMessage: 'Login with Biometrics',
+        fallbackLabel: 'Use Passcode',
+      });
+
+      if (result.success) {
+        setEmail(savedEmail);
+        setPassword(savedPassword);
+        setIsLoading(true);
+        const response = await authApi.login({ email: savedEmail, password: savedPassword });
+        const actualToken = response.token || response.accessToken || response.data?.token;
+        if (actualToken) {
+          await AsyncStorage.setItem('userToken', actualToken);
+          await authApi.getMe();
+        }
+        setIsLoading(false);
+        onLoginSuccess();
+      }
+    } catch (error: any) {
+      setIsLoading(false);
+      Alert.alert('Biometric Error', error.message || 'Authentication failed.');
+    }
+  };
 
   const validateForm = (): boolean => {
     let isValid = true;
@@ -5414,21 +6928,23 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({ onLoginSuccess }) => {
 
     try {
       const response = await authApi.login({ email, password });
-      
+
       // Save the token to phone storage
       if (response.token || response.accessToken || response.data?.token) {
         const actualToken = response.token || response.accessToken || response.data?.token;
         await AsyncStorage.setItem('userToken', actualToken);
-        
+        await AsyncStorage.setItem('userEmail', email);
+        await AsyncStorage.setItem('userPassword', password);
+
         // Fetch the user data behind the scenes
         const userData = await authApi.getMe();
-        
+
         // Here you would typically save `userData` to Redux, Context, or Zustand
         // For now, we will just silently go to the Home screen!
       } else {
         console.warn("No token found in response", response);
       }
-      
+
       setIsLoading(false);
       onLoginSuccess();
     } catch (error: any) {
@@ -5449,18 +6965,19 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({ onLoginSuccess }) => {
           keyboardShouldPersistTaps="handled"
         >
           {/* Header */}
-          <View style={screenStyles.headerContainer}>
-            <View style={screenStyles.logoBadge}>
-              <Text style={screenStyles.logoText}>EQ</Text>
-            </View>
-            <Text style={screenStyles.appName}>Enquirely</Text>
+          <Animated.View style={[screenStyles.headerContainer, { opacity: logoOpacityAnim, transform: [{ scale: logoScaleAnim }] }]}>
+            <Animated.Image
+              source={require('../../assets/robot_logo.png')}
+              style={[screenStyles.logoImage, { transform: [{ translateY: floatAnim }] }]}
+              resizeMode="contain"
+            />
             <Text style={screenStyles.subtitle}>
-              The premium enquiry management workspace
+              The premium workflow management workspace
             </Text>
-          </View>
+          </Animated.View>
 
           {/* Form Card */}
-          <View style={screenStyles.card}>
+          <Animated.View style={[screenStyles.card, { opacity: cardOpacityAnim, transform: [{ translateY: cardSlideAnim }] }]}>
             <Text style={screenStyles.cardTitle}>Welcome Back</Text>
             <Text style={screenStyles.cardSubtitle}>
               Enter your credentials to access your dashboard
@@ -5502,18 +7019,18 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({ onLoginSuccess }) => {
               onPress={handleLogin}
               style={screenStyles.submitButton}
             />
-          </View>
 
-          {/* Footer */}
-          <View style={screenStyles.footerContainer}>
-            <Text style={screenStyles.footerText}>Don't have an account? </Text>
             <TouchableOpacity
+              style={screenStyles.biometricButton}
               activeOpacity={0.7}
-              onPress={() => Alert.alert('Register', 'Sign up functionality coming soon!')}
+              onPress={handleBiometricLogin}
             >
-              <Text style={screenStyles.signUpLink}>Sign Up</Text>
+              <Text style={screenStyles.biometricButtonText}>Login with Biometrics</Text>
             </TouchableOpacity>
-          </View>
+          </Animated.View>
+
+          {/* Footer - Removed Sign Up as per user request */}
+          <View style={screenStyles.footerContainer}></View>
         </ScrollView>
       </KeyboardAvoidingView>
     </SafeAreaView>
@@ -5538,30 +7055,10 @@ const screenStyles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: theme.spacing.xl,
   },
-  logoBadge: {
-    width: 64,
-    height: 64,
-    backgroundColor: theme.colors.primary,
-    borderRadius: theme.borderRadius.lg,
-    justifyContent: 'center',
-    alignItems: 'center',
+  logoImage: {
+    width: 300,
+    height: 150,
     marginBottom: theme.spacing.md,
-    shadowColor: theme.colors.primary,
-    shadowOffset: { width: 0, height: 6 },
-    shadowOpacity: 0.4,
-    shadowRadius: 10,
-    elevation: 8,
-  },
-  logoText: {
-    color: '#FFF',
-    fontSize: theme.typography.sizes.xl,
-    fontWeight: '800',
-  },
-  appName: {
-    color: theme.colors.text,
-    fontSize: theme.typography.sizes.xxl,
-    fontWeight: '800',
-    letterSpacing: 0.5,
   },
   subtitle: {
     color: theme.colors.textMuted,
@@ -5576,23 +7073,25 @@ const screenStyles = StyleSheet.create({
     padding: theme.spacing.lg,
     borderWidth: 1,
     borderColor: theme.colors.border,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 10 },
-    shadowOpacity: 0.25,
-    shadowRadius: 15,
-    elevation: 10,
+    shadowColor: '#94A3B8',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.15,
+    shadowRadius: 12,
+    elevation: 6,
   },
   cardTitle: {
     color: theme.colors.text,
     fontSize: theme.typography.sizes.xl,
     fontWeight: '700',
     marginBottom: 4,
+    textAlign: 'center',
   },
   cardSubtitle: {
     color: theme.colors.textMuted,
     fontSize: theme.typography.sizes.sm,
     marginBottom: theme.spacing.lg,
     lineHeight: 20,
+    textAlign: 'center',
   },
   forgotPasswordContainer: {
     alignSelf: 'flex-end',
@@ -5605,6 +7104,20 @@ const screenStyles = StyleSheet.create({
   },
   submitButton: {
     marginTop: theme.spacing.xs,
+  },
+  biometricButton: {
+    marginTop: theme.spacing.md,
+    alignItems: 'center',
+    padding: theme.spacing.sm,
+    backgroundColor: theme.colors.surfaceLight,
+    borderRadius: theme.borderRadius.md,
+    borderWidth: 1,
+    borderColor: theme.colors.primary,
+  },
+  biometricButtonText: {
+    color: theme.colors.primary,
+    fontSize: theme.typography.sizes.sm,
+    fontWeight: '700',
   },
   footerContainer: {
     flexDirection: 'row',
@@ -5623,10 +7136,12 @@ const screenStyles = StyleSheet.create({
   },
 });
 
-```
 
-### src\screens\MessageListScreen.tsx
-```tsx
+
+================================================
+--- File: D:\Enquiry_Application\src\screens\MessageListScreen.tsx ---
+================================================
+
 import React, { useState } from 'react';
 import {
   View,
@@ -5886,10 +7401,12 @@ const styles = StyleSheet.create({
   }
 });
 
-```
 
-### src\screens\PolicyScreen.tsx
-```tsx
+
+================================================
+--- File: D:\Enquiry_Application\src\screens\PolicyScreen.tsx ---
+================================================
+
 import React from 'react';
 import {
   ScrollView,
@@ -6007,11 +7524,13 @@ const styles = StyleSheet.create({
   },
 });
 
-```
 
-### src\screens\SettingsScreen.tsx
-```tsx
-import React, { useState } from 'react';
+
+================================================
+--- File: D:\Enquiry_Application\src\screens\SettingsScreen.tsx ---
+================================================
+
+import React, { useState, useEffect } from 'react';
 import {
   ScrollView,
   StyleSheet,
@@ -6026,6 +7545,7 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Svg, { Path, Circle, Rect, Line } from 'react-native-svg';
+import { authApi } from '../api/authApi';
 
 const COLORS = {
   bg: '#F5F7F9', // Light Gray
@@ -6060,6 +7580,22 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({ onBack, onLogout
   const languages = ['English', 'Spanish', 'French', 'German', 'Hindi', 'Tamil'];
   const themes = ['System Default', 'Light Mode', 'Dark Mode'];
 
+  const [user, setUser] = useState<any>(null);
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const userData = await authApi.getMe();
+        if (userData && userData.data) {
+          setUser(userData.data);
+        }
+      } catch (error) {
+        console.error("Failed to fetch user data in settings", error);
+      }
+    };
+    fetchUserData();
+  }, []);
+
   return (
     <SafeAreaView style={styles.safeArea}>
       <StatusBar barStyle="dark-content" backgroundColor={COLORS.bg} />
@@ -6085,8 +7621,8 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({ onBack, onLogout
             {/* Using a placeholder SVG or color block for avatar since we don't have the image file */}
             <View style={styles.avatarPlaceholderHero} />
           </View>
-          <Text style={styles.heroProfileName}>Abishek Sivaraj</Text>
-          <Text style={styles.heroProfileEmail}>abishek.sivaraj@atplgroup.com</Text>
+          <Text style={styles.heroProfileName}>{user ? `${user.firstName} ${user.lastName || ''}`.trim() : 'Loading...'}</Text>
+          <Text style={styles.heroProfileEmail}>{user ? user.email : ''}</Text>
           <TouchableOpacity style={styles.viewProfileBtnHero} activeOpacity={0.8} onPress={onViewProfile}>
             <Text style={styles.viewProfileTextHero}>View Profile</Text>
           </TouchableOpacity>
@@ -6094,16 +7630,7 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({ onBack, onLogout
 
         {/* Settings Grid */}
         <View style={styles.settingsGrid}>
-          {/* Organization */}
-          <TouchableOpacity style={[styles.gridSquare, styles.gridFullWidth]} activeOpacity={0.7}>
-            <View style={styles.gridHeaderRow}>
-               <View style={[styles.gridIconWrap, { backgroundColor: '#FDD7E0' }]}>
-                 <OrgIcon color={COLORS.primaryPink} />
-               </View>
-               <Text style={styles.gridTitle}>Organization</Text>
-            </View>
-            <Text style={styles.gridSubText} numberOfLines={1}>Archery Technocrats Private Limited</Text>
-          </TouchableOpacity>
+
 
           {/* Theme */}
           <TouchableOpacity style={styles.gridSquare} activeOpacity={0.7} onPress={() => setThemeModalVisible(true)}>
@@ -6155,17 +7682,29 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({ onBack, onLogout
             <Text style={styles.gridTitle}>Terms</Text>
             <Text style={styles.gridSubText}>Of Service</Text>
           </TouchableOpacity>
+
+          {/* Test Alarm Sound */}
+          <TouchableOpacity 
+            style={[styles.gridSquare, styles.gridFullWidth, { backgroundColor: '#FFFBEB' }]} 
+            activeOpacity={0.7} 
+            onPress={async () => {
+               const { sendLocalNotification } = require('../utils/notifications');
+               await sendLocalNotification('Test Alarm ⏰', 'This is what your 9:30 AM / 6:30 PM buzzer will sound like!');
+            }}
+          >
+            <View style={styles.gridHeaderRow}>
+               <View style={[styles.gridIconWrap, { backgroundColor: '#F59E0B' }]}>
+                 <Text style={{ color: COLORS.white, fontWeight: 'bold', fontSize: 18 }}>🔔</Text>
+               </View>
+               <Text style={styles.gridTitle}>Test Alarm Sound</Text>
+            </View>
+            <Text style={styles.gridSubText} numberOfLines={1}>Tap here to trigger a test buzzer notification</Text>
+          </TouchableOpacity>
         </View>
 
       </ScrollView>
 
-      {/* Update Available Banner */}
-      <View style={styles.updateBanner}>
-        <Text style={styles.updateText}>Update Available</Text>
-        <TouchableOpacity activeOpacity={0.8}>
-          <Text style={styles.updateBtnText}>UPDATE</Text>
-        </TouchableOpacity>
-      </View>
+      {/* Update Available Banner Removed as requested */}
 
       {/* Language Modal */}
       <Modal visible={languageModalVisible} transparent animationType="fade" onRequestClose={() => setLanguageModalVisible(false)}>
@@ -6584,10 +8123,12 @@ const styles = StyleSheet.create({
   },
 });
 
-```
 
-### src\screens\VideoCallScreen.tsx
-```tsx
+
+================================================
+--- File: D:\Enquiry_Application\src\screens\VideoCallScreen.tsx ---
+================================================
+
 import React, { useEffect, useState } from 'react';
 import {
   View,
@@ -6873,10 +8414,12 @@ const styles = StyleSheet.create({
   },
 });
 
-```
 
-### src\utils\notifications.ts
-```ts
+
+================================================
+--- File: D:\Enquiry_Application\src\utils\notifications.ts ---
+================================================
+
 import * as Device from 'expo-device';
 import * as Notifications from 'expo-notifications';
 import { Platform } from 'react-native';
@@ -6897,11 +8440,12 @@ Notifications.setNotificationHandler({
  */
 export async function setupNotifications(): Promise<boolean> {
   if (Platform.OS === 'android') {
-    await Notifications.setNotificationChannelAsync('default', {
-      name: 'default',
+    await Notifications.setNotificationChannelAsync('alarm-channel', {
+      name: 'Alarms',
       importance: Notifications.AndroidImportance.MAX,
-      vibrationPattern: [0, 250, 250, 250],
+      vibrationPattern: [0, 500, 250, 500, 250, 500],
       lightColor: '#E85874',
+      bypassDnd: true, // Try to bypass Do Not Disturb
     });
   }
 
@@ -6947,7 +8491,7 @@ export async function scheduleDailyAlarms() {
   // First, clear all previously scheduled notifications to avoid duplicates
   await Notifications.cancelAllScheduledNotificationsAsync();
 
-  // Schedule Check-in Alarm at 9:25 AM
+  // Schedule Check-in Alarm at 9:30 AM
   await Notifications.scheduleNotificationAsync({
     content: {
       title: "Check-in Reminder ⏰",
@@ -6955,11 +8499,12 @@ export async function scheduleDailyAlarms() {
       sound: true,
       priority: Notifications.AndroidNotificationPriority.MAX,
       categoryIdentifier: 'CHECK_IN_CATEGORY',
-    },
+      vibrationPattern: [0, 500, 250, 500, 250, 500],
+    } as any,
     trigger: {
-      type: Notifications.SchedulableTriggerInputTypes.DAILY,
+      type: 'daily' as any,
       hour: 9,
-      minute: 25,
+      minute: 30,
     },
   });
 
@@ -6971,11 +8516,12 @@ export async function scheduleDailyAlarms() {
       sound: true,
       priority: Notifications.AndroidNotificationPriority.MAX,
       categoryIdentifier: 'CHECK_OUT_CATEGORY',
-    },
+      vibrationPattern: [0, 500, 250, 500, 250, 500],
+    } as any,
     trigger: {
-      type: Notifications.SchedulableTriggerInputTypes.DAILY,
+      type: 'daily' as any,
       hour: 18,
-      minute: 25,
+      minute: 30,
     },
   });
 
@@ -6992,10 +8538,29 @@ export async function sendLocalNotification(title: string, body: string) {
       body,
       sound: true,
       priority: Notifications.AndroidNotificationPriority.HIGH,
-    },
+      vibrationPattern: [0, 500, 250, 500, 250, 500],
+    } as any,
     trigger: null,
   });
 }
 
-```
+
+
+================================================
+--- File: D:\Enquiry_Application\__tests__\App.test.tsx ---
+================================================
+
+/**
+ * @format
+ */
+
+import React from 'react';
+import ReactTestRenderer from 'react-test-renderer';
+import App from '../App';
+
+test('renders correctly', async () => {
+  await ReactTestRenderer.act(() => {
+    ReactTestRenderer.create(<App />);
+  });
+});
 

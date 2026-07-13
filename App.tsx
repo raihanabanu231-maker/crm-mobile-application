@@ -9,13 +9,15 @@ import { MessageListScreen } from './src/screens/MessageListScreen';
 import { ChatScreen } from './src/screens/ChatScreen';
 import { VideoCallScreen } from './src/screens/VideoCallScreen';
 import { DailyCallReportScreen } from './src/screens/DailyCallReportScreen';
+import { CallHistoryScreen } from './src/screens/CallHistoryScreen';
 import { setupNotifications, scheduleDailyAlarms } from './src/utils/notifications';
 import * as Notifications from 'expo-notifications';
 import { Alert } from 'react-native';
 
 function App() {
-  const [currentScreen, setCurrentScreen] = useState<'LOGIN' | 'HOME' | 'APPLY_LEAVE' | 'SETTINGS' | 'POLICY' | 'MESSAGE_LIST' | 'CHAT' | 'VIDEO_CALL' | 'DAILY_CALL_REPORT'>('LOGIN');
+  const [currentScreen, setCurrentScreen] = useState<'LOGIN' | 'HOME' | 'APPLY_LEAVE' | 'SETTINGS' | 'POLICY' | 'MESSAGE_LIST' | 'CHAT' | 'VIDEO_CALL' | 'DAILY_CALL_REPORT' | 'CALL_HISTORY'>('LOGIN');
   const [selectedLeave, setSelectedLeave] = useState<any>(null);
+  const [selectedReportId, setSelectedReportId] = useState<string | undefined>(undefined);
   const [selectedChatContact, setSelectedChatContact] = useState<any>(null);
   const [initialHomeNav, setInitialHomeNav] = useState('Activities');
   const [policyType, setPolicyType] = useState<'privacy' | 'terms' | 'preferences'>('privacy');
@@ -56,7 +58,7 @@ function App() {
             setCurrentScreen('APPLY_LEAVE');
           }}
           onMessagePress={() => setCurrentScreen('MESSAGE_LIST')}
-          onDailyCallReportPress={() => setCurrentScreen('DAILY_CALL_REPORT')}
+          onDailyCallReportPress={() => setCurrentScreen('CALL_HISTORY')}
         />
       )}
       {currentScreen === 'APPLY_LEAVE' && (
@@ -111,9 +113,23 @@ function App() {
           onEndCall={() => setCurrentScreen('CHAT')}
         />
       )}
+      {currentScreen === 'CALL_HISTORY' && (
+        <CallHistoryScreen 
+          onBack={() => setCurrentScreen('HOME')}
+          onAddCall={() => {
+            setSelectedReportId(undefined);
+            setCurrentScreen('DAILY_CALL_REPORT');
+          }}
+          onEditCall={(id) => {
+            setSelectedReportId(id);
+            setCurrentScreen('DAILY_CALL_REPORT');
+          }}
+        />
+      )}
       {currentScreen === 'DAILY_CALL_REPORT' && (
         <DailyCallReportScreen 
-          onBack={() => setCurrentScreen('HOME')}
+          reportId={selectedReportId}
+          onBack={() => setCurrentScreen('CALL_HISTORY')}
         />
       )}
     </SafeAreaProvider>

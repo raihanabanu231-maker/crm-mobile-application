@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "Perfect Flow 360",
-    "slug": "perfect-flow-360",
+    "slug": "enquiry-application",
     "version": "1.0.0",
     "platforms": [
       "ios",
@@ -9,14 +9,33 @@
     ],
     "icon": "./assets/robot_logo.png",
     "android": {
-      "package": "com.perfectflow360.mobile"
+      "package": "com.perfectflow360.mobile",
+      "permissions": [
+        "android.permission.USE_BIOMETRIC",
+        "android.permission.USE_FINGERPRINT",
+        "android.permission.ACCESS_COARSE_LOCATION",
+        "android.permission.ACCESS_FINE_LOCATION"
+      ]
+    },
+    "ios": {
+      "infoPlist": {
+        "NSFaceIDUsageDescription": "Allow Perfect Flow 360 to use Face ID for secure login.",
+        "NSLocationWhenInUseUsageDescription": "Perfect Flow 360 needs your location to verify check-in.",
+        "NSLocationAlwaysUsageDescription": "Perfect Flow 360 needs your location to verify check-in."
+      }
     },
     "plugins": [
-      "@react-native-community/datetimepicker"
+      "expo-local-authentication",
+      [
+        "expo-location",
+        {
+          "locationAlwaysAndWhenInUsePermission": "Allow Perfect Flow 360 to use your location for attendance check-in."
+        }
+      ]
     ],
     "extra": {
       "eas": {
-        "projectId": "c3cd1bab-9ca6-45bd-b36d-3c42ebaf9732"
+        "projectId": "e715dc5c-4633-4b41-823e-5f99a40d6951"
       }
     }
   },

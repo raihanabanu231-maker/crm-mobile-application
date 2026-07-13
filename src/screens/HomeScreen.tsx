@@ -1930,10 +1930,10 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ initialNav, onLogout, on
                     <Text style={profStyles.avatarEmoji}>👤</Text>
                   </View>
                 </View>
-                <Text style={profStyles.profileGreeting}>Good Evening, {user ? user.firstName : '...'}</Text>
-                <Text style={profStyles.profileName}>{user ? `${user.firstName} ${user.lastName}` : '...'}</Text>
+                <Text style={profStyles.profileGreeting}>Good Evening, {user ? user?.firstName || '' : '...'}</Text>
+                <Text style={profStyles.profileName}>{user ? `${user?.firstName || ''} ${user?.lastName || ''}` : '...'}</Text>
                 <View style={profStyles.profileRoleTag}>
-                  <Text style={profStyles.profileRoleTagText}>{user ? (String(user.designation || 'EMPLOYEE')).toUpperCase() : '...'}</Text>
+                  <Text style={profStyles.profileRoleTagText}>{user ? (String(user?.designation || 'EMPLOYEE')).toUpperCase() : '...'}</Text>
                 </View>
 
                 <TouchableOpacity
@@ -2026,7 +2026,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ initialNav, onLogout, on
                   <View style={profStyles.infoCardIcon}><Text>✉️</Text></View>
                   <View style={profStyles.infoCardContent}>
                     <Text style={profStyles.infoCardLabel}>Email</Text>
-                    <Text style={profStyles.infoCardValue} numberOfLines={1}>{user ? user.email : '...'}</Text>
+                    <Text style={profStyles.infoCardValue} numberOfLines={1}>{user ? user?.email || '' : '...'}</Text>
                   </View>
                 </View>
               </View>
@@ -2042,8 +2042,8 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ initialNav, onLogout, on
                     placeholder="Write a short introduction about yourself"
                     placeholderTextColor={COLORS.textMuted}
                     multiline
-                    value={isEditingProfile ? (editProfileData.aboutMe || '') : (user?.aboutMe || '')}
-                    onChangeText={(val) => setEditProfileData({ ...editProfileData, aboutMe: val })}
+                    value={isEditingProfile ? (editProfileData?.aboutMe || '') : (user?.aboutMe || '')}
+                    onChangeText={(val) => setEditProfileData({ ...(editProfileData || {}), aboutMe: val })}
                     editable={isEditingProfile}
                   />
                 </View>
@@ -2063,7 +2063,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ initialNav, onLogout, on
                     <View style={profStyles.fieldWrap}>
                       <Text style={profStyles.fieldLabel}>Nick Name</Text>
                       {isEditingProfile ? (
-                        <TextInput style={[profStyles.fieldValue, { borderBottomWidth: 1, borderBottomColor: '#ccc', padding: 0 }]} value={editProfileData.nickName || ''} onChangeText={(val) => setEditProfileData({ ...editProfileData, nickName: val })} />
+                        <TextInput style={[profStyles.fieldValue, { borderBottomWidth: 1, borderBottomColor: '#ccc', padding: 0 }]} value={editProfileData?.nickName || ''} onChangeText={(val) => setEditProfileData({ ...(editProfileData || {}), nickName: val })} />
                       ) : (
                         <Text style={user?.nickName ? profStyles.fieldValue : profStyles.fieldValueEmpty}>{user?.nickName || '-'}</Text>
                       )}
@@ -2071,21 +2071,21 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ initialNav, onLogout, on
                     <View style={profStyles.fieldWrap}>
                       <Text style={profStyles.fieldLabel}>First Name</Text>
                       {isEditingProfile ? (
-                        <TextInput style={[profStyles.fieldValue, { borderBottomWidth: 1, borderBottomColor: '#ccc', padding: 0 }]} value={editProfileData.firstName || ''} onChangeText={(val) => setEditProfileData({ ...editProfileData, firstName: val })} />
+                        <TextInput style={[profStyles.fieldValue, { borderBottomWidth: 1, borderBottomColor: '#ccc', padding: 0 }]} value={editProfileData?.firstName || ''} onChangeText={(val) => setEditProfileData({ ...(editProfileData || {}), firstName: val })} />
                       ) : (
-                        <Text style={profStyles.fieldValue}>{user ? user.firstName : '...'}</Text>
+                        <Text style={profStyles.fieldValue}>{user ? user?.firstName || '' : '...'}</Text>
                       )}
                     </View>
                     <View style={profStyles.fieldWrap}>
                       <Text style={profStyles.fieldLabel}>Email Address</Text>
-                      <Text style={profStyles.fieldValue} numberOfLines={1}>{user ? user.email : '...'}</Text>
+                      <Text style={profStyles.fieldValue} numberOfLines={1}>{user ? user?.email || '' : '...'}</Text>
                     </View>
                     <View style={profStyles.fieldWrap}>
                       <Text style={profStyles.fieldLabel}>Last Name</Text>
                       {isEditingProfile ? (
-                        <TextInput style={[profStyles.fieldValue, { borderBottomWidth: 1, borderBottomColor: '#ccc', padding: 0 }]} value={editProfileData.lastName || ''} onChangeText={(val) => setEditProfileData({ ...editProfileData, lastName: val })} />
+                        <TextInput style={[profStyles.fieldValue, { borderBottomWidth: 1, borderBottomColor: '#ccc', padding: 0 }]} value={editProfileData?.lastName || ''} onChangeText={(val) => setEditProfileData({ ...(editProfileData || {}), lastName: val })} />
                       ) : (
-                        <Text style={profStyles.fieldValue}>{user ? user.lastName : '...'}</Text>
+                        <Text style={profStyles.fieldValue}>{user ? user?.lastName || '' : '...'}</Text>
                       )}
                     </View>
                   </View>
@@ -2133,7 +2133,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ initialNav, onLogout, on
                     <View style={profStyles.fieldWrap}>
                       <Text style={profStyles.fieldLabel}>Date of Birth</Text>
                       {isEditingProfile ? (
-                        <TextInput style={[profStyles.fieldValue, { borderBottomWidth: 1, borderBottomColor: '#ccc', padding: 0 }]} value={editProfileData.dob || ''} onChangeText={(val) => setEditProfileData({ ...editProfileData, dob: val })} placeholder="YYYY-MM-DD" />
+                        <TextInput style={[profStyles.fieldValue, { borderBottomWidth: 1, borderBottomColor: '#ccc', padding: 0 }]} value={editProfileData?.dob || ''} onChangeText={(val) => setEditProfileData({ ...(editProfileData || {}), dob: val })} placeholder="YYYY-MM-DD" />
                       ) : (
                         <Text style={user?.dob ? profStyles.fieldValue : profStyles.fieldValueEmpty}>{user?.dob || '-'}</Text>
                       )}
@@ -2145,7 +2145,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ initialNav, onLogout, on
                     <View style={profStyles.fieldWrapFull}>
                       <Text style={profStyles.fieldLabel}>Expertise (Ask Me About)</Text>
                       {isEditingProfile ? (
-                        <TextInput style={[profStyles.fieldValue, { borderBottomWidth: 1, borderBottomColor: '#ccc', padding: 0 }]} value={editProfileData.expertise || ''} onChangeText={(val) => setEditProfileData({ ...editProfileData, expertise: val })} />
+                        <TextInput style={[profStyles.fieldValue, { borderBottomWidth: 1, borderBottomColor: '#ccc', padding: 0 }]} value={editProfileData?.expertise || ''} onChangeText={(val) => setEditProfileData({ ...(editProfileData || {}), expertise: val })} />
                       ) : (
                         <Text style={user?.expertise ? profStyles.fieldValue : profStyles.fieldValueEmpty}>{user?.expertise || '-'}</Text>
                       )}
@@ -2164,7 +2164,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ initialNav, onLogout, on
                     <View style={profStyles.fieldWrap}>
                       <Text style={profStyles.fieldLabel}>UAN</Text>
                       {isEditingProfile ? (
-                        <TextInput style={[profStyles.fieldValue, { borderBottomWidth: 1, borderBottomColor: '#ccc', padding: 0 }]} value={editProfileData.uan || ''} onChangeText={(val) => setEditProfileData({ ...editProfileData, uan: val })} />
+                        <TextInput style={[profStyles.fieldValue, { borderBottomWidth: 1, borderBottomColor: '#ccc', padding: 0 }]} value={editProfileData?.uan || ''} onChangeText={(val) => setEditProfileData({ ...(editProfileData || {}), uan: val })} />
                       ) : (
                         <Text style={user?.uan ? profStyles.fieldValue : profStyles.fieldValueEmpty}>{user?.uan || '-'}</Text>
                       )}
@@ -2172,7 +2172,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ initialNav, onLogout, on
                     <View style={profStyles.fieldWrap}>
                       <Text style={profStyles.fieldLabel}>PAN</Text>
                       {isEditingProfile ? (
-                        <TextInput style={[profStyles.fieldValue, { borderBottomWidth: 1, borderBottomColor: '#ccc', padding: 0 }]} value={editProfileData.pan || ''} onChangeText={(val) => setEditProfileData({ ...editProfileData, pan: val })} />
+                        <TextInput style={[profStyles.fieldValue, { borderBottomWidth: 1, borderBottomColor: '#ccc', padding: 0 }]} value={editProfileData?.pan || ''} onChangeText={(val) => setEditProfileData({ ...(editProfileData || {}), pan: val })} />
                       ) : (
                         <Text style={user?.pan ? profStyles.fieldValue : profStyles.fieldValueEmpty}>{user?.pan || '-'}</Text>
                       )}
@@ -2191,7 +2191,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ initialNav, onLogout, on
                     <View style={profStyles.fieldWrap}>
                       <Text style={profStyles.fieldLabel}>Work Phone</Text>
                       {isEditingProfile ? (
-                        <TextInput style={[profStyles.fieldValue, { borderBottomWidth: 1, borderBottomColor: '#ccc', padding: 0 }]} value={editProfileData.workPhoneNumber || ''} onChangeText={(val) => setEditProfileData({ ...editProfileData, workPhoneNumber: val })} keyboardType="phone-pad" />
+                        <TextInput style={[profStyles.fieldValue, { borderBottomWidth: 1, borderBottomColor: '#ccc', padding: 0 }]} value={editProfileData?.workPhoneNumber || ''} onChangeText={(val) => setEditProfileData({ ...(editProfileData || {}), workPhoneNumber: val })} keyboardType="phone-pad" />
                       ) : (
                         <Text style={user?.workPhoneNumber ? profStyles.fieldValue : profStyles.fieldValueEmpty}>{user?.workPhoneNumber || '-'}</Text>
                       )}
@@ -2203,7 +2203,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ initialNav, onLogout, on
                     <View style={profStyles.fieldWrapFull}>
                       <Text style={profStyles.fieldLabel}>Present Address</Text>
                       {isEditingProfile ? (
-                        <TextInput style={[profStyles.fieldValue, { borderBottomWidth: 1, borderBottomColor: '#ccc', padding: 0 }]} value={editProfileData.address || ''} onChangeText={(val) => setEditProfileData({ ...editProfileData, address: val })} />
+                        <TextInput style={[profStyles.fieldValue, { borderBottomWidth: 1, borderBottomColor: '#ccc', padding: 0 }]} value={editProfileData?.address || ''} onChangeText={(val) => setEditProfileData({ ...(editProfileData || {}), address: val })} />
                       ) : (
                         <Text style={user?.address ? profStyles.fieldValue : profStyles.fieldValueEmpty}>{user?.address || '-'}</Text>
                       )}
@@ -2232,20 +2232,20 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ initialNav, onLogout, on
                       placeholder="List your certifications (e.g., AWS Certified, PMP)"
                       placeholderTextColor={COLORS.textMuted}
                       multiline
-                      value={editProfileData.certifications || ''}
-                      onChangeText={(val) => setEditProfileData({ ...editProfileData, certifications: val })}
+                      value={editProfileData?.certifications || ''}
+                      onChangeText={(val) => setEditProfileData({ ...(editProfileData || {}), certifications: val })}
                     />
                   ) : (
                     <Text style={user?.certifications ? profStyles.fieldValue : profStyles.fieldValueEmpty}>
-                      {user?.certifications || 'No certifications added yet.'}
+                      {String(user?.certifications || 'No certifications added yet.')}
                     </Text>
                   )}
                   {/* Display uploaded files */}
                   <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ marginTop: 12 }}>
-                    {(Array.isArray(isEditingProfile ? editProfileData.certificationsFiles : user?.certificationsFiles) ? (isEditingProfile ? editProfileData.certificationsFiles : user?.certificationsFiles) : []).map((file: any, idx: number) => (
+                    {(Array.isArray(isEditingProfile ? editProfileData?.certificationsFiles : user?.certificationsFiles) ? (isEditingProfile ? editProfileData?.certificationsFiles : user?.certificationsFiles) : []).map((file: any, idx: number) => (
                       <View key={idx} style={{ marginRight: 12, position: 'relative', marginTop: 8 }}>
-                        {file.type === 'image' ? (
-                          <Image source={{ uri: file.uri }} style={{ width: 80, height: 80, borderRadius: 8, backgroundColor: '#E5E7EB' }} />
+                        {file?.type === 'image' ? (
+                          <Image source={{ uri: file?.uri }} style={{ width: 80, height: 80, borderRadius: 8, backgroundColor: '#E5E7EB' }} />
                         ) : (
                           <View style={{ width: 80, height: 80, borderRadius: 8, backgroundColor: '#FEF2F2', justifyContent: 'center', alignItems: 'center', borderWidth: 1, borderColor: '#FECACA' }}>
                             <Svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#EF4444" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -2255,16 +2255,16 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ initialNav, onLogout, on
                               <Line x1="16" y1="17" x2="8" y2="17" />
                               <Polyline points="10 9 9 9 8 9" />
                             </Svg>
-                            <Text style={{ fontSize: 10, color: '#EF4444', marginTop: 8, fontWeight: '700', maxWidth: 70 }} numberOfLines={1}>{file.name || 'PDF'}</Text>
+                            <Text style={{ fontSize: 10, color: '#EF4444', marginTop: 8, fontWeight: '700', maxWidth: 70 }} numberOfLines={1}>{file?.name || 'PDF'}</Text>
                           </View>
                         )}
                         {isEditingProfile && (
                           <TouchableOpacity
                             style={{ position: 'absolute', top: -8, right: -8, backgroundColor: '#EF4444', borderRadius: 12, padding: 4, elevation: 4, zIndex: 10 }}
                             onPress={() => {
-                              const newFiles = [...editProfileData.certificationsFiles];
+                              const newFiles = [...(editProfileData?.certificationsFiles || [])];
                               newFiles.splice(idx, 1);
-                              setEditProfileData({ ...editProfileData, certificationsFiles: newFiles });
+                              setEditProfileData({ ...(editProfileData || {}), certificationsFiles: newFiles });
                             }}
                           >
                             <Svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#FFF" strokeWidth="2.5" strokeLinecap="round">
